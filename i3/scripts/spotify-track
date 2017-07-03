@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Display the current track on Spotify if it's running.
+DISPLAY_TRACK=true
+
+if [[ $(ps -U root -u root -N | grep -Fo 'spotify') == *spotify* ]]; then
+
+        if [ "$DISPLAY_TRACK" = true ]; then
+                TITLE=`playerctl -p spotify metadata 'xesam:title'`
+                ARTIST=`playerctl -p spotify metadata 'xesam:artist'`
+                ALBUM=`playerctl -p spotify metadata 'xesam:album'`
+
+                # If "title - artist - album" is very long, just display the
+                # title and artist.
+                NCHAR=$((${#TITLE} + ${#ARTIST} + ${#ALBUM}))
+                if [[ $NCHAR -gt 30 || "$ALBUM" == "$TITLE" ]]; then
+                        TRACK=`echo $TITLE " - " $ARTIST`
+                        echo "$TRACK" | sed -e 's/?/\?/g'
+                else
+                        TRACK=`echo $TITLE " - " $ARTIST " - " $ALBUM`
+                        echo "$TRACK" | sed -e 's/?/\?/g'
+                fi
+        else
+                echo "spotify not running"
+        fi
+        if [[ $BLOCK_BUTTON == '1' ]]; then
+                i3-msg workspace number 5 
+        fi
+        if [[ $BLOCK_BUTTON == '3' ]]; then
+                TITLE=`playerctl -p spotify metadata 'xesam:title'`
+                ARTIST=`playerctl -p spotify metadata 'xesam:artist'`
+                ALBUM=`playerctl -p spotify metadata 'xesam:album'`
+                notify-send "$TITLE" "$ARTIST\n$ALBUM" \
+                        -i /usr/share/icons/Numix-Circle/64/apps/spotify.svg
+        fi
+else
+        exit 0
+fi
