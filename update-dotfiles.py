@@ -15,18 +15,12 @@ DIRECTORIES = {
     r".Xresources": "",
     r".ssh/config": "",
     r".i3blocks.conf": "i3/",
-    r".config/i3/*": "i3/",
+    r".config/i3/": "i3/",
     r".config/dunst/dunstrc": "dunst/",
     r"/etc/init.d/gk-sensitivity.sh": "init.d/",
     r".config/sublime-text-3/Installed\ Packages/": "sublime-text-3/",
     r".config/sublime-text-3/Packages/": "sublime-text-3/",
 }
-
-# These files are removed after everything is copied, because not everything
-# makes sense to copy in the directories. Wildcards are accepted.
-EXCLUDE_FILES = [
-    r"cache"
-]
 
 def copy(src, dst):
     cmd = "cp -R %s %s" %(src, dst)
