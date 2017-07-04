@@ -1,0 +1,14 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Markdown Extended",
+		"Package Control",
+		"PackageResourceViewer",
+		"Theme - Afterglow",
+		"Wrap Plus"
+	]
+}
