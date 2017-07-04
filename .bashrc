@@ -151,7 +151,6 @@ __prompt() {
 
     if [ -d .git ]; then
         branch=$(git branch | grep \* | cut -d ' ' -f2)
-        name=$(git config --global user.name)
         PS1="$PS1$LightGray | $LightBlue$branch"
 
         changed=$(git status -s | egrep -c "^ [MARCD]")
