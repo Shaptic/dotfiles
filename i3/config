@@ -145,7 +145,12 @@ bar {
 new_window none
 focus_follows_mouse no
 focus_on_window_activation focus
-#hide_edge_borders both
+hide_edge_borders both
+
+# i3-gaps configuration
+gaps inner 10
+gaps outer 1
+smart_gaps on
 
 assign [class="Firefox"] 3
 assign [class="Thunderbird"] 3

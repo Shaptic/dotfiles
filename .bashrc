@@ -142,13 +142,28 @@ __prompt() {
 
     PS1="$Green┌─ $CMDICON $LightGreen\u$LightGray@$Green\h $LightGray[$LightBlue\w$LightGray]"
 
-    if [ $LASTCMD -ne 0 ]; then
-        PS1="$PS1 $LightGray── [$Red error=$LASTCMD$LightGray ]"
+    if [[ $(pwd) == *"cicada"* ]]; then
+        count=$(ct | wc -l)
+    else
+        count=$(t | wc -l)
     fi
+    PS1="$PS1 $LightGray── [ $Green📓$count"
+
+    if [ -d .git ]; then
+        branch=$(git branch | grep \* | cut -d ' ' -f2)
+        name=$(git config --global user.name)
+        PS1="$PS1$LightGray | $LightBlue$branch"
+
+        changed=$(git status -s | egrep -c "^ [MARCD]")
+        added=$(git status -s | egrep -c "^\?\?")
+        PS1="$PS1$LightGray $Red+$changed$LightGray,$Cyan+$added"
+    fi
+    PS1="$PS1$LightGray ]"
 
     PS1="$PS1\n$Green└─ $LightGray$PERM "
     PS2="    $LightGray "
 }
 
+. ~/.bash_colors
 PROMPT_COMMAND=__prompt
 # screenfetch -c 38,14

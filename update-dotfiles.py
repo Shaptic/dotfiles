@@ -15,7 +15,7 @@ DIRECTORIES = {
     r".Xresources": "",
     r".ssh/config": "",
     r".i3blocks.conf": "i3/",
-    r".config/i3/": "i3/",
+    r".config/i3/*": "i3/",
     r".config/dunst/dunstrc": "dunst/",
     r"/etc/init.d/gk-sensitivity.sh": "init.d/",
     r".config/sublime-text-3/Installed\ Packages/": "sublime-text-3/",
