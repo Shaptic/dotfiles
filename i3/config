@@ -170,6 +170,8 @@ exec --no-startup-id i3-msg 'workspace 4; layout tabbed; exec slack; exec spotif
 bindsym $mod+c kill
 #bindsym ctrl+$mod+l exec gnome-screensaver-command -l
 #bindsym ctrl+$mod+q exec systemctl suspend
+
+bindsym Alt+Tab exec rofi -show window -font "Inconsolatas 14" -opacity 100
 bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%

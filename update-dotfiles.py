@@ -10,6 +10,7 @@ DIRECTORIES = {
     # source folder -> destination folder
     r".bashrc": "",
     r".inputrc": "",
+    r".Xresources": "",
     r".ssh/config": "",
     r".i3blocks.conf": "i3/",
     r".config/i3/*": "i3/",
