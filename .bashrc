@@ -117,10 +117,6 @@ if ! shopt -oq posix; then
 fi
 
 # custom things are below
-alias snip="import snip.png"
-alias snipc="snip && xclip -selection clipboard -target image/png < snip.png && rm snip.png"
-alias explore="nautilus --no-desktop &"
-alias pdf="evince"
 
 # up-down arrows expand search history -- ily brandon.
 bind '"\e[A"':history-search-backward
@@ -131,30 +127,6 @@ export MOZ_USE_XINPUT2=1
 
 __prompt() {
     local LASTCMD=$?
-    local RED="\[\033[1;31m\]"
-    local GREEN="\[\033[1;32m\]"
-    local CYAN="\[\033[0;36m\]"
-    local LIGHT_CYAN="\[\033[1;36m\]"
-    local LIGHT_BLUE="\[\033[1;34m\]"
-    local NO_COLOUR="\[\033[0m\]"
-
-    local Black="\[\033[0;30m\]"
-    local Gray="\[\033[1;30m\]"
-    local LightGray="\[\033[0;37m\]"
-    local Blue="\[\033[0;34m\]"
-    local LightBlue="\[\033[1;34m\]"
-    local Green="\[\033[0;32m\]"
-    local LightGreen="\[\033[1;32m\]"
-    local Cyan="\[\033[0;36m\]"
-    local LightCyan="\[\033[1;36m\]"
-    local Red="\[\033[0;31m\]"
-    local LightRed="\[\033[1;31m\]"
-    local Purple="\[\033[0;35m\]"
-    local LightPurple="\[\033[1;35m\]"
-    local Brown="\[\033[0;33m\]"
-    local Yellow="\[\033[1;33m\]"
-    local Light="\[\033[0;37m\]"
-    local White="\[\033[1;37m\]"
 
     if [ $UID -eq "0" ]; then
         PERM="$Red#$NO_COLOUR"

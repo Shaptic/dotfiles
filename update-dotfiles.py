@@ -9,6 +9,8 @@ BASE_PATH = "~/"
 DIRECTORIES = {
     # source folder -> destination folder
     r".bashrc": "",
+    r".bash_colors": "",
+    r".bash_aliases": "",
     r".inputrc": "",
     r".Xresources": "",
     r".ssh/config": "",
