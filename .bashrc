@@ -156,7 +156,7 @@ __prompt() {
         staged=$(git status -s | egrep -c "^[MARCD] ")
         changed=$(git status -s | egrep -c "^ [MARCD]")
         added=$(git status -s | egrep -c "^\?\?")
-        PS1="$PS1$LightGray $Green+$staged,$Red+$changed$LightGray,$Cyan+$added"
+        PS1="$PS1$LightGray $Green+$staged$LightGray,$Red+$changed$LightGray,$Cyan+$added"
     fi
     PS1="$PS1$LightGray ]"
 

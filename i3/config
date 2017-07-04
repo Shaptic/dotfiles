@@ -154,7 +154,8 @@ smart_gaps on
 
 assign [class="Firefox"] 3
 assign [class="Thunderbird"] 3
-assign [class="Spotify"] 5
+assign [class="Spotify"] 4
+for_window [class="Spotify"] move to workspace 4
 
 # ======== Startup Configuration ======== #
 exec killall -q notify-osd
@@ -170,8 +171,8 @@ exec --no-startup-id xinput set-prop 13 261 1.8
 exec --no-startup-id xinput set-prop 13 301 -113 -113
 
 # ======== Startup Applications ======== #
-exec --no-startup-id i3-msg 'workspace 3; layout tabbed; exec firefox; exec thunderbird'
-exec --no-startup-id i3-msg 'workspace 4; layout tabbed; exec slack; exec spotify'
+exec ~/.config/i3/workspaces/3.sh
+exec ~/.config/i3/workspaces/4.sh
 
 # ======== Key Bindings ======== #
 bindsym $mod+c kill
