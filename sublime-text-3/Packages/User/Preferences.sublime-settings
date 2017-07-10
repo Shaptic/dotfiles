@@ -10,7 +10,7 @@
 	"enable_telemetry": "disabled",
 	"ensure_newline_at_eof_on_save": true,
 	"font_face": "Inconsolata",
-	"font_size": 16,
+	"font_size": 19,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":

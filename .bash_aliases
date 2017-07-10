@@ -3,6 +3,8 @@ alias snipc="snip && xclip -selection clipboard -target image/png < snip.png && 
 alias explore="nautilus --no-desktop &"
 alias pdf="evince"
 
+alias lock="gnome-screensaver-command -l"
+
 # Task manager.
 alias t="python2 ~/taskmgr/t.py --task-dir ~/taskmgr/tasks --list tasks"
 alias ct="python2 ~/taskmgr/t.py --task-dir ~/taskmgr/tasks --list coding-tasks"

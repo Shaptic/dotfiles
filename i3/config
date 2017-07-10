@@ -176,8 +176,7 @@ exec ~/.config/i3/workspaces/4.sh
 
 # ======== Key Bindings ======== #
 bindsym $mod+c kill
-#bindsym ctrl+$mod+l exec gnome-screensaver-command -l
-#bindsym ctrl+$mod+q exec systemctl suspend
+bindsym ctrl+$mod+l exec gnome-screensaver-command -l
 
 bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
 
