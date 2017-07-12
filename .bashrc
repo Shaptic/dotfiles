@@ -194,6 +194,8 @@ __prompt() {
   PS1="$PS1$BDWHITE ]"
 
   PS1="$PS1\n$EDGE└─ $WHITE$PERM "
+  echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"
+
   PS2="    $WHITE "
 }
 
