@@ -163,7 +163,7 @@ __prompt() {
   fi
 
   EDGE="$CYAN"
-  PS1="$EDGE┌─ $CMDICON $BDCYAN\u$WHITE@$CYAN\h $BDWHITE[$BDGREEN\w$BDWHITE]"
+  PS1="$EDGE┌─ $CMDICON $BDCYAN\u$WHITE@$CYAN\h $BDWHITE[$BDBLUE\w$BDWHITE]"
 
   if [[ $(pwd) == *"cicada"* ]]; then
     count=$(ct | wc -l)
@@ -174,7 +174,7 @@ __prompt() {
 
   if [ -d .git ]; then
     branch=$(git branch | grep \* | cut -d ' ' -f2)
-    PS1="$PS1$WHITE | $BDGREEN$branch$WHITE"
+    PS1="$PS1$WHITE | $BDBLUE$branch$WHITE"
 
     staged=$(git status -s | egrep -c "^[MARCD] ")
     changed=$(git status -s | egrep -c "^ [MARCD]")
