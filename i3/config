@@ -142,15 +142,16 @@ bar {
 
 # ======== Visual Configuration ======== #
 
-new_window none
+new_window pixel 1
 focus_follows_mouse no
 focus_on_window_activation focus
 hide_edge_borders both
 
 # i3-gaps configuration
-gaps inner 10
+gaps inner 5
 gaps outer 1
 smart_gaps on
+smart_borders on
 
 assign [class="Firefox"] 3
 assign [class="Thunderbird"] 3
@@ -171,8 +172,8 @@ exec --no-startup-id xinput set-prop 13 261 1.8
 exec --no-startup-id xinput set-prop 13 301 -113 -113
 
 # ======== Startup Applications ======== #
-exec ~/.config/i3/workspaces/3.sh
-exec ~/.config/i3/workspaces/4.sh
+exec --no-startup-id ~/.config/i3/scripts/prepare-workspaces.sh
+exec xfce4-power-manager
 
 # ======== Key Bindings ======== #
 bindsym $mod+c kill
