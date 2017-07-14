@@ -44,7 +44,7 @@ if [[ $(ps -U root -u root -N | grep -Fo 'spotify') == *spotify* ]]; then
     ARTIST=`playerctl -p spotify metadata 'xesam:artist'`
     ALBUM=`playerctl -p spotify metadata 'xesam:album'`
     notify-send "$TITLE" "$ARTIST\n$ALBUM" \
-      -i /usr/share/icons/Numix-Circle/64/apps/spotify.svg
+      -i /usr/share/icons/Numix-Circle/48/apps/spotify.svg
   fi
 else
   exit 0
