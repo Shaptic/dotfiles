@@ -9,7 +9,7 @@
     #
     # for a complete reference see http://developer.gnome.org/pango/stable/PangoMarkupFormat.html
     # If markup is not allowed, those tags will be stripped out of the message.
-    allow_markup = yes
+    markup = full
 
     # The format of the message. Possible variables are:
     #   %a  appname
@@ -58,7 +58,8 @@
     # right side of the screen.  Y is measured from the top and down respectevly.
     # The width can be negative. In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "0x10-6-60"
+    geometry = "0x18-6-60"
+    min_notification_width = 400
 
     # The transparency of the window. range: [0; 100]
     # This option will only work if a compositing windowmanager is present (e.g. xcompmgr, compiz, etc..)
@@ -117,12 +118,11 @@
     startup_notification = true
 
     stack_duplicates = false
-    hide_duplicate_count = true
+    #hide_duplicate_count = true
 
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
     icon_position = left
-    icon_folders = /usr/share/icons/Numix-Circle/48/apps/:/usr/share/icons/elementary-xfce/actions/16/
-    max_icon_size = 64
+    icon_folders = /usr/share/icons/Numix-Circle/48/apps/:/usr/share/icons/Numix/48/status/:/usr/share/icons/elementary-xfce/actions/48/:/usr/share/icons/elementary-xfce/status/48/
 
     # dmenu path
     dmenu = /usr/bin/dmenu -p dunst:
@@ -149,9 +149,9 @@
     timeout = 5
 
 [urgency_normal]
-    background = "#DADFE1"
+    background = "#C5EFF7"
     foreground = "#22313F"
-    timeout = 20
+    timeout = 8
 
 [urgency_critical]
     background = "#D35400"
