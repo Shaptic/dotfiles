@@ -180,9 +180,10 @@ __prompt() {
   else
     count=$(t | wc -l)
   fi
-  PS1="$PS1 $WHITE── [ $GREEN📓$count"
+  PS1="$PS1 $WHITE── $BDWHITE[ $GREEN📓$count"
 
-  if [ -d .git ]; then
+  git status &> /dev/null
+  if [[ $? -eq 0 ]]; then
     branch=$(git branch | grep \* | cut -d ' ' -f2)
     PS1="$PS1$WHITE | $BDBLUE$branch$WHITE"
 

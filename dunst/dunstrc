@@ -58,8 +58,8 @@
     # right side of the screen.  Y is measured from the top and down respectevly.
     # The width can be negative. In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "0x18-6-60"
-    min_notification_width = 400
+    geometry = "700x18-6-60"
+    #min_notification_width = 400
 
     # The transparency of the window. range: [0; 100]
     # This option will only work if a compositing windowmanager is present (e.g. xcompmgr, compiz, etc..)
@@ -146,12 +146,12 @@
 [urgency_low]
     background = "#DADFE1"
     foreground = "#22313F"
-    timeout = 5
+    timeout = 2
 
 [urgency_normal]
     background = "#C5EFF7"
     foreground = "#22313F"
-    timeout = 8
+    timeout = 4
 
 [urgency_critical]
     background = "#D35400"
