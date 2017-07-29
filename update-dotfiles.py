@@ -16,6 +16,7 @@ DIRECTORIES = {
     r".ssh/config": "",
     r".i3blocks.conf": "i3/",
     r".config/i3/*": "i3/",
+    r"/usr/share/i3blocks/*": "i3/i3blocks/scripts/",
     r".config/dunst/dunstrc": "dunst/",
     r"/etc/init.d/gk-sensitivity.sh": "init.d/",
     r".config/sublime-text-3/Installed\ Packages/": "sublime-text-3/",
@@ -40,14 +41,9 @@ for src, dst in DIRECTORIES.items():
     print "Backing up '%s' to '%s'" % (src, dst)
 
     # If the folder doesn't exist, create it.
-    root = dst
-    while root.count("/") > 1:
-        root, _ = os.path.split(root)
-    root, _ = os.path.split(root)   # one more time to leave off files
-    full_dst = os.path.expanduser(os.path.join(REPO_PATH, root))
-
+    full_dst = os.path.expanduser(os.path.join(REPO_PATH, dst))
     if not os.path.exists(full_dst):
         print "The folder '%s' doesn't exist, creating it at '%s'" % (root, full_dst)
-        os.mkdir(full_dst)
+        os.makedirs(full_dst)
 
     copy(os.path.join(BASE_PATH, src), full_dst)
