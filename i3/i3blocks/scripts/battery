@@ -42,9 +42,9 @@ $short_text = $full_text;
 if ($acpi =~ /(\d\d):(\d\d):/) {
 	$full_text .= " (";
 	if ((int $1) gt 0) {
-		$full_text .= "$1h";
+		$full_text .= "$1";
 	}
-	$full_text .= "$2m";
+	$full_text .= ":$2";
 
 	if ($status eq 'Discharging') {
 		$full_text .= '↓';

@@ -7,11 +7,11 @@ fi
 
 URL="http://rss.accuweather.com/rss/liveweather_rss.asp?metric=0&locCode=$LOC"
 OUT=$(curl -s $URL | grep "Currently in")
-CITY=$(echo $OUT | grep -oP "Currently in (.*):" | sed -s 's/Currently in '// | sed -s s/://)
+CITY=$(echo $OUT | grep -oP "Currently in (.*):" | sed -s 's/Currently in //;s/://')
 OUT=$(echo $OUT | awk -F: '{print $2}')
 
 temp=$(echo $OUT | awk '{print $1}')
-weather=$(echo $OUT | sed -s 's/.*and //' | sed -s 's/\s//g')
+weather=$(echo $OUT | sed -s 's/.*and //;s/\s//g')
 
 OUTPUT="$temp°"
 
@@ -29,6 +29,10 @@ if [[ "$weather" == "Clear" ]]; then
 elif [[ "$weather" == "Sunny" ]]; then
   OUTPUT="$OUTPUT☀"
   COLOR="#F9BF3B"
+
+elif [[ "$weather" == "PartlySunny" ]]; then
+  OUTPUT="$OUTPUT🌤"
+  COLOR="#F5D76E"
 
 elif [[ "$weather" == "Cloudy" ]]; then
   OUTPUT="$OUTPUT🌥"
