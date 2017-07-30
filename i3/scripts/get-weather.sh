@@ -22,13 +22,17 @@ if [[ "$weather" == "Clear" ]]; then
     OUTPUT="$OUTPUT🌙"
     COLOR="#67809F"
   else
-    OUTPUT="$OUTPUT🌞"
+    OUTPUT="$OUTPUT☀"
     COLOR="#F9BF3B"
   fi
 
 elif [[ "$weather" == "Sunny" ]]; then
-  OUTPUT="$OUTPUT🌞"
+  OUTPUT="$OUTPUT☀"
   COLOR="#F9BF3B"
+
+elif [[ "$weather" == "Cloudy" ]]; then
+  OUTPUT="$OUTPUT🌥"
+  COLOR="#67809F"
 
 else
   OUTPUT="$OUTPUT[$weather]"

@@ -35,18 +35,24 @@ if ($acpi !~ /: (\w+), (\d+)%/) {
 
 $status = $1;
 $percent = $2;
+
 $full_text = "$percent%";
-
-if ($status eq 'Discharging') {
-	$full_text .= ' DIS';
-} elsif ($status eq 'Charging') {
-	$full_text .= ' CHR';
-}
-
 $short_text = $full_text;
 
-if ($acpi =~ /(\d\d:\d\d):/) {
-	$full_text .= " ($1)";
+if ($acpi =~ /(\d\d):(\d\d):/) {
+	$full_text .= " (";
+	if ((int $1) gt 0) {
+		$full_text .= "$1h";
+	}
+	$full_text .= "$2m";
+
+	if ($status eq 'Discharging') {
+		$full_text .= '↓';
+	} elsif ($status eq 'Charging') {
+		$full_text .= '↑';
+	}
+
+	$full_text .= ')';
 }
 
 # print text
