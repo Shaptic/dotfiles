@@ -7,6 +7,13 @@ fi
 
 URL="http://rss.accuweather.com/rss/liveweather_rss.asp?metric=0&locCode=$LOC"
 OUT=$(curl -s $URL | grep "Currently in")
+if [[ $? -ne 0 ]]; then
+  echo "[no weather]"
+  echo "[n/a]"
+  echo "#EF4836"
+  exit
+fi
+
 CITY=$(echo $OUT | grep -oP "Currently in (.*):" | sed -s 's/Currently in //;s/://')
 OUT=$(echo $OUT | awk -F: '{print $2}')
 

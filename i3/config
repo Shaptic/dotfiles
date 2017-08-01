@@ -168,6 +168,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id xcompmgr -c -f -n -D 5
 exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
+exec --no-startup-id nitrogen --restore
 
 # Set mouse sensitivity.
 exec --no-startup-id xinput set-prop 13 261 1.8
