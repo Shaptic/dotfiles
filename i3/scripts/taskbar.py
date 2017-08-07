@@ -104,14 +104,15 @@ WeatherBlock = BlockOutput(u"%d°%s (%s)",   # temperature, icon, city
                            "%s")            # color based on weather
 ICONS = {
     "Clear":        (u"🌙", "#67809F"),
-    "DayClear":     (u"☀",  "#22A7F0"),
-    "Sunny":        (u"☀",  "#F9BF3B"),
+    "DayClear":     (u"☀", "#22A7F0"),
+    "Sunny":        (u"☀", "#F9BF3B"),
     "Partly Sunny": (u"🌤", "#F5D76E"),
-    "Cloudy":       (u"🌥", "#6C7A89"),
+    "Cloudy":       (u"☁", "#6C7A89"),
     "Partly Cloudy":(u"🌥", "#67809F"),
+    "Mostly Cloudy":(u"🌥", "#67809F"),
     "Sunrise":      (u"🌅", "#E26A6A"),
     "Sunset":       (u"🌅", "#E26A6A"),
-    "default":      (u"?",  "#C5EFF7"),
+    "default":      (u"",  "#C5EFF7"),
 }
 
 
@@ -144,9 +145,13 @@ class SimpleWeather(object):
         """ Handles "Clear" weather, which changes based on time of day.
         """
         sunrise, sunset = self.peaks
-        if self._now > sunset[1] and self._now < sunrise[0]:
-            return ICONS[desc]      # night time
 
+        # Approximate the next day's sunrise so that we can properly compare it
+        # for nighttime.
+        sunrise = sunrise[0].replace(day=sunrise[0].day + 1)
+
+        if self._now > sunset[1] and self._now < sunrise:
+            return ICONS[desc]      # night time
         return ICONS["DayClear"]
 
     def on_sunset(self):
@@ -186,6 +191,7 @@ class SimpleWeather(object):
         "Sunny":        on_sunny,
         "Partly Sunny": on_simple,
         "Partly Cloudy":on_simple,
+        "Mostly Cloudy":on_simple,
         "Cloudy":       on_simple,
         "default":      on_simple,
     }
@@ -223,18 +229,20 @@ def get_peak_times(location, skip=False):
     """
     if not skip:
         response = requests.get(SUN_URL % location)
-        times = response.json()
 
-    if skip or times.status_code != 200:    # ballpark it
-        now = datetime.now()
+    now = datetime.now()
+    if skip or response.status_code != 200:    # ballpark it
         sunrise = now.replace(hour=6)
         sunset  = now.replace(hour=8, minute=30)
 
     else:
+        times = response.json()
         sunrise = times["results"]["sunrise"]
         sunset  = times["results"]["sunset"]
         sunrise = datetime.strptime(sunrise, "%I:%M:%S %p")
         sunset  = datetime.strptime(sunset,  "%I:%M:%S %p")
+        sunrise = sunrise.replace(year=now.year, month=now.month, day=now.day)
+        sunset  = sunset.replace( year=now.year, month=now.month, day=now.day)
 
         # Now, determine our timezone so we can get proper offsets, because the
         # times are originally in UTC.
@@ -244,6 +252,7 @@ def get_peak_times(location, skip=False):
 
         offset   = timedelta(seconds=timezone["rawOffset"])
         offset  += timedelta(seconds=timezone["dstOffset"])
+
         sunrise += offset
         sunset  += offset
 
@@ -343,7 +352,7 @@ def main():
         sys.exit(1)
 
     # We don't need API key validation in zipcode mode.
-    if not args.zipcode:
+    if not args.zip:
         global API_KEYS, IP_URL, LOC_URL, TZ_URL
         with open(args.keyfile, "r") as f:
             API_KEYS = tuple(f.read().strip().split())
@@ -356,17 +365,17 @@ def main():
             LOC_URL += API_KEYS[1]
             TZ_URL  += API_KEYS[2]
 
-    if args.zipcode:
-        loc = args.zipcode
+    if args.zip:
+        loc = args.zip
     else:
         loc = get_location() if not args.coords else tuple(args.coords)
 
-    if args.zipcode and args.mode != "weather":
-        parser.error("--zipcode should only be used in weather mode")
+    if args.zip and args.mode != "weather":
+        parser.error("--zip should only be used in weather mode")
 
     if args.mode == "weather":
-        if args.zipcode:
-            w = SimpleWeather(args.zipcode, faren=not args.celsius)
+        if args.zip:
+            w = SimpleWeather(args.zip, faren=not args.celsius)
         else:
             w = SmartWeather(loc, faren=not args.celsius)
         print w.block
