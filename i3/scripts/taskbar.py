@@ -28,6 +28,7 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
     Pass the mode you wish to use, which must be one of the supported modes:
         - weather
         - location
+        - peaks
 
     Location Mode
     =============
@@ -54,6 +55,11 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
 
     NOTE: Only locations in the United States are supported, because the
           AccuWeather API uses postal codes for lookups in the RSS feed.
+
+    Peak Mode
+    =========
+    Provides a way to directly retrieve sunrise and sunset times from the
+    current location.
 
     API Keys
     ========
@@ -240,9 +246,9 @@ def get_peak_times(location):
     # times are originally in UTC.
     response = requests.get(TZ_URL % (location[0], location[1], int(time.time())))
     timezone = response.json()
+
     offset   = timedelta(seconds=timezone["rawOffset"])
     offset  += timedelta(seconds=timezone["dstOffset"])
-
     sunrise += offset
     sunset  += offset
     return (
@@ -318,18 +324,19 @@ def get_weather(zip_code, faren=True, parse_city=False):
     return temp, status, city
 
 def main():
-    MODES = ("weather", "location", "test-i3")
+    MODES = ("weather", "peaks", "location", "test-i3")
     parser = argparse.ArgumentParser(description=DESCRIPTION,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("mode", help="one of " + repr(MODES) + " indicating "
                                      "the block you wish to generate (or task "
                                      "you wish to perform)")
-    parser.add_argument("--coords", metavar=("lat","long"), nargs=2, type=float,
+    parser.add_argument("-c", "--coords", metavar=("lat","long"), nargs=2,
+                        type=float,
                         help="performs actions for the specified [mode] at the "
                              "specified location")
-    parser.add_argument("--keyfile", metavar="filename", default=KEYPATH,
+    parser.add_argument("-f", "--keyfile", metavar="path", default=KEYPATH,
                         help="path pointing to your Google API keys")
-    parser.add_argument("-z", "--zipcode", type=int,
+    parser.add_argument("-z", "--zipcode", metavar="code", type=int,
                         help="skips all coordinate lookups and does the most "
                              "that's possible with a zipcode")
     args = parser.parse_args()
@@ -344,10 +351,9 @@ def main():
         with open(args.keyfile, "r") as f:
             API_KEYS = tuple(f.read().strip().split())
             if len(API_KEYS) != 3:
-                print "API keyfile (at %s) must have 2 keys, one per line, " \
-                      "for the geolocate, geocode, and timezone APIs, " \
-                      "respectively." % (args.keyfile)
-                sys.exit(1)
+                parser.error("API keyfile (at %s) must have 2 keys, one per " \
+                             "line for the geolocate, geocode, and timezone " \
+                             "APIs, respectively." % args.keyfile)
 
             IP_URL  += API_KEYS[0]
             LOC_URL += API_KEYS[1]
@@ -358,6 +364,9 @@ def main():
     else:
         loc = get_location() if not args.coords else tuple(args.coords)
 
+    if args.zipcode and args.mode != "weather":
+        parser.error("--zipcode should only be used in weather mode")
+
     if args.mode == "weather":
         w = SimpleWeather(args.zipcode) if args.zipcode else SmartWeather(loc)
         print w.block
@@ -365,6 +374,16 @@ def main():
     elif args.mode == "location":
         print loc
         print "%s | %s" % get_city(loc)
+
+    elif args.mode == "peaks":
+        delta = timedelta(minutes=30)
+        city, _ = get_city(loc)
+        sunrise, sunset = get_peak_times(loc)
+        sunrise = sunrise[0] + delta
+        sunset  = sunset[0]  + delta
+        print "In", city, "the..."
+        print "  sunrise is at", sunrise.time().strftime("%I:%M:%S %p")
+        print "  sunset  is at", sunset.time().strftime( "%I:%M:%S %p")
 
     elif args.mode == "test-i3":
         print "long test"
