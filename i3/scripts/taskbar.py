@@ -36,8 +36,11 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
 
     Weather Mode
     ============
-    We determine the location just like in Location Mode, via a Google API,
-    unless it's provided. Then, we analyze the weather data at the location:
+    This provides location-aware weather based on IP address geolocation. We
+    determine the location just like in Location Mode, via a Google API, unless
+    it's provided via `--zipcode` or `--coord` mode. Then, we analyze the
+    weather data at the location:
+
         - The current city, which is used in the "full" output.
         - The current "peak" times -- the sunrise and sunset -- for that date,
           which, on a "clear" day, show special icons around that time period.
@@ -253,7 +256,7 @@ def get_city(location):
     for row in j["results"]:
         for item in row["address_components"]:
             types = item["types"]
-            if not state and "administrative_level_1" in types:
+            if not state and "administrative_area_level_1" in types:
                 state = item["short_name"]
             if not city and "locality" in types:
                 city = item["long_name"]
