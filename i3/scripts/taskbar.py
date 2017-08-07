@@ -7,7 +7,7 @@ TODO: Better error-handling.
       Celsius support.
       Better location testing.
       Investigate a better weather API for international lookups?
-      Support BLOCK_BUTTON from i3blocks.
+      Support $BLOCK_BUTTON from i3blocks for opening up a full weather page?
 """
 import os
 import re
@@ -108,25 +108,17 @@ class Weather(object):
     The data that we determine is suitable for outputting an i3block, which is
     a 3-tuple of (short description, full description, color).
 
-    :location       a 2-tuple of latitude and longitude coordinates
-    :time[=None]    a `datetime` object at which to determine the weather,
-                    defaulting to the current time
+    :location           a 2-tuple of latitude and longitude coordinates
+    :time[=None]        a `datetime` object at which to determine the weather,
+                        defaulting to the current time
     """
 
-    WEATHER = {
-        "Clear":        lambda *a: Weather.on_clear(*a),
-        "Sunny":        lambda *a: Weather.on_sunny(*a),
-        "PartlySunny":  lambda *a: Weather.on_simple(*a),
-        "Cloudy":       lambda *a: Weather.on_simple(*a),
-        "default":      lambda *a: Weather.on_simple(*a),
-    }
-
     def __init__(self, location, time=None):
-        location = location or get_location()
-        self.city, self.zip = get_city(location)
-        self.temp, self.desc = get_weather(self.zip, faren=True)
-        self.peaks = get_peak_times(location)
         self._now = datetime.datetime.now() if not time else time
+
+        self.city, self.zip = get_city(location)
+        self.temp, self.desc, _ = get_weather(self.zip, faren=True)
+        self.peaks = get_peak_times(location)
 
         if self.desc not in self.WEATHER:
             self.icon, self.color = ICONS["default"]
@@ -173,6 +165,44 @@ class Weather(object):
     @property
     def block(self):
         return "\n".join((self.full, self.short, self.color))
+
+    WEATHER = {
+        "Clear":        on_clear,
+        "Sunny":        on_sunny,
+        "PartlySunny":  on_simple,
+        "Cloudy":       on_simple,
+        "default":      on_simple,
+    }
+
+
+class SimpleWeather(Weather):
+    """ Determines metadata from a single weather API call using only a zipcode.
+
+    :zipcode        a US zip code value
+    :time[=None]    a `datetime` object at which to determine the weather,
+                    defaulting to the current time
+    """
+
+    def __init__(self, zipcode, time=None):
+        self._now = datetime.datetime.now() if not time else time
+        self.zip = zipcode
+        results = get_weather(self.zip, faren=True, parse_city=True)
+        if not results:
+            raise ValueError("Failed to find weather data for location: " +\
+                             repr(self.zip))
+
+        self.temp, self.desc, self.city = results
+        sunrise = self._now.replace(hour=6, minute=30)
+        sunset  = self._now.replace(hour=9)
+        self.peaks = (
+            (sunrise - datetime.timedelta(hours=1), sunrise),
+            (sunset  - datetime.timedelta(hours=1), sunset))
+
+        if self.desc not in self.WEATHER:
+            self.icon, self.color = ICONS["default"]
+        else:
+            self.icon, self.color = self.WEATHER[self.desc](self, self.desc)
+
 
 def get_peak_times(location):
     """ Retrieves sunrise and sunset times for certain coordinates.
@@ -236,7 +266,7 @@ def get_city(location):
 
     return city, postal
 
-def get_weather(zip_code, faren=True):
+def get_weather(zip_code, faren=True, parse_city=False):
     """ Retrieves the current weather (temp, description) at a zip code.
     """
     response = requests.get(TMP_URL % (int(not faren), zip_code))
@@ -244,11 +274,20 @@ def get_weather(zip_code, faren=True):
     items = xml.getElementsByTagName("item")
     if not items: return None
     current = items[0]
+
     title = current.getElementsByTagName("title")[0].childNodes[0].data
     matches = re.match("Currently: (.*): (\d+)%s" % ("F" if faren else "C"),
                        title)
     if not matches: return None
-    return int(matches.group(2)), matches.group(1)
+    temp, status = int(matches.group(2)), matches.group(1)
+
+    city = ""
+    if parse_city:
+        desc = current.getElementsByTagName("description")[0].childNodes[0].data
+        matches = re.match("Currently in (.*): (\d+)", desc)
+        city = matches.group(1)
+
+    return temp, status, city
 
 def main():
     MODES = ("weather", "location", "test-i3")
@@ -257,32 +296,42 @@ def main():
     parser.add_argument("mode", help="one of " + repr(MODES) + " indicating "
                                      "the block you wish to generate (or task "
                                      "you wish to perform)")
-    parser.add_argument("--location", metavar=("lat","long"), nargs=2,
-                        type=float, dest="location",
+    parser.add_argument("--coords", metavar=("lat","long"), nargs=2, type=float,
                         help="performs actions for the specified [mode] at the "
-                             "specified location (latitude, longitude)")
+                             "specified location")
     parser.add_argument("--keyfile", metavar="filename", default=KEYPATH,
                         help="path pointing to your Google API keys")
+    parser.add_argument("-z", "--zipcode", type=int,
+                        help="skips all coordinate lookups and does the most "
+                             "that's possible with a zipcode")
     args = parser.parse_args()
 
     if args.mode not in MODES:
         print "Valid modes are: %s" % ','.join(MODES)
         sys.exit(1)
 
-    global API_KEYS, IP_URL, LOC_URL
-    with open(args.keyfile, "r") as f:
-        API_KEYS = tuple(f.read().strip().split())
-        if len(API_KEYS) != 2:
-            print "API keyfile (at %s) must have 2 keys, one per line, for " \
-                  "the geolocate and geocode APIs, respectively." % args.keyfile
-            sys.exit(1)
+    # We don't need API key validation in zipcode mode.
+    if not args.zipcode:
+        global API_KEYS, IP_URL, LOC_URL
+        with open(args.keyfile, "r") as f:
+            API_KEYS = tuple(f.read().strip().split())
+            if len(API_KEYS) != 2:
+                print "API keyfile (at %s) must have 2 keys, one per line, " \
+                      "for the geolocate and geocode APIs, respectively." % (
+                        args.keyfile)
+                sys.exit(1)
 
-        IP_URL  += API_KEYS[0]
-        LOC_URL += API_KEYS[1]
+            IP_URL  += API_KEYS[0]
+            LOC_URL += API_KEYS[1]
 
-    loc = get_location() if not args.location else tuple(args.location)
+    if args.zipcode:
+        loc = args.zipcode
+    else:
+        loc = get_location() if not args.coords \
+                             else tuple(map(float, args.coords.split(',')))
+
     if args.mode == "weather":
-        w = Weather(loc)
+        w = SimpleWeather(args.zipcode) if args.zipcode else Weather(loc)
         print w.block
 
     elif args.mode == "location":
@@ -295,8 +344,4 @@ def main():
         print "#FFFFFF"
 
 if __name__ == '__main__':
-    try:
-        main()
-    except Exception, e:
-        with open(".taskbar-errors", "w") as f:
-            f.write(str(e))
+    main()
