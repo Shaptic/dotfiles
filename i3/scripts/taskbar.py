@@ -12,7 +12,7 @@ TODO: Better error-handling.
 import os
 import re
 import sys
-import datetime
+import time
 
 import enum
 import collections
@@ -20,7 +20,8 @@ import argparse
 import requests
 
 import json
-from   xml.dom import minidom
+from   xml.dom  import minidom
+from   datetime import datetime, timedelta
 
 DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
 
@@ -57,10 +58,11 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
     API Keys
     ========
     Because we use Google's APIs, there need to be API keys present for the
-    calls to work. It's trivial to get one, just go to these two links:
+    calls to work. It's trivial to get one, just go to these links:
 
         https://developers.google.com/maps/documentation/geocoding/get-api-key
         https://developers.google.com/maps/documentation/geolocation/get-api-key
+        https://developers.google.com/maps/documentation/timezone/get-api-key
 
     and add these to a ".keys" file (with each key on its own line) in the same
     directory as the weather script (by default). This can be changed by passing
@@ -87,10 +89,14 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
 
 # https://developers.google.com/maps/documentation/geolocation/
 # https://developers.google.com/maps/documentation/geocoding/
+# https://developers.google.com/maps/documentation/timezone/
 # https://sunrise-sunset.org/api
 IP_URL = "https://www.googleapis.com/geolocation/v1/geolocate?key="
 LOC_URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%s&key="
 SUN_URL = "https://api.sunrise-sunset.org/json?lat=%f&lng=%f&formatted=1"
+TZ_URL = "https://maps.googleapis.com/maps/api/timezone/json?" + \
+         "location=%f,%f&timestamp=%d&key="
+
 TMP_URL = "http://rss.accuweather.com/rss/liveweather_rss.asp?metric=%d&locCode=%s"
 KEYPATH = os.path.join(os.path.dirname(sys.argv[0]), ".keys")
 API_KEYS = tuple()
@@ -103,31 +109,37 @@ ICONS = {
     "Clear":        (u"🌙", "#67809F"),
     "DayClear":     (u"☀",  "#22A7F0"),
     "Sunny":        (u"☀",  "#F9BF3B"),
-    "PartlySunny":  (u"🌤", "#F5D76E"),
-    "Cloudy":       (u"🌥", "#67809F"),
+    "Partly Sunny": (u"🌤", "#F5D76E"),
+    "Cloudy":       (u"🌥", "#6C7A89"),
+    "Partly Cloudy":(u"🌥", "#67809F"),
     "Sunrise":      (u"🌅", "#E26A6A"),
     "Sunset":       (u"🌅", "#E26A6A"),
     "default":      (u"",   "#C5EFF7"),
 }
 
 
-class Weather(object):
-    """ Describes the complete weather state for a location.
+class SimpleWeather(object):
+    """ Determines location and weather from only a zipcode.
 
-    The data that we determine is suitable for outputting an i3block, which is
-    a 3-tuple of (short description, full description, color).
-
-    :location           a 2-tuple of latitude and longitude coordinates
-    :time[=None]        a `datetime` object at which to determine the weather,
-                        defaulting to the current time
+    :zipcode        a US zip code value
+    :time[=None]    a `datetime` object at which to determine the weather,
+                    defaulting to the current time
     """
 
-    def __init__(self, location, time=None):
-        self._now = datetime.datetime.now() if not time else time
+    def __init__(self, zipcode, time=None):
+        self._now = datetime.now() if not time else time
+        self.zip = zipcode
+        results = get_weather(self.zip, faren=True, parse_city=True)
+        if not results:
+            raise ValueError("Failed to find weather data for location: " +\
+                             repr(self.zip))
 
-        self.city, self.zip = get_city(location)
-        self.temp, self.desc, _ = get_weather(self.zip, faren=True)
-        self.peaks = get_peak_times(location)
+        self.temp, self.desc, self.city = results
+        sunrise = self._now.replace(hour=6, minute=30)
+        sunset  = self._now.replace(hour=9)
+        self.peaks = (
+            (sunrise - timedelta(hours=1), sunrise),
+            (sunset  - timedelta(hours=1), sunset))
 
         if self.desc not in self.WEATHER:
             self.icon, self.color = ICONS["default"]
@@ -178,34 +190,30 @@ class Weather(object):
     WEATHER = {
         "Clear":        on_clear,
         "Sunny":        on_sunny,
-        "PartlySunny":  on_simple,
+        "Partly Sunny": on_simple,
+        "Partly Cloudy":on_simple,
         "Cloudy":       on_simple,
         "default":      on_simple,
     }
 
 
-class SimpleWeather(Weather):
-    """ Determines metadata from a single weather API call using only a zipcode.
+class SmartWeather(SimpleWeather):
+    """ Describes the complete weather state for a location.
 
-    :zipcode        a US zip code value
-    :time[=None]    a `datetime` object at which to determine the weather,
-                    defaulting to the current time
+    The data that we determine is suitable for outputting an i3block, which is
+    a 3-tuple of (short description, full description, color).
+
+    :location           a 2-tuple of latitude and longitude coordinates
+    :time[=None]        a `datetime` object at which to determine the weather,
+                        defaulting to the current time
     """
 
-    def __init__(self, zipcode, time=None):
-        self._now = datetime.datetime.now() if not time else time
-        self.zip = zipcode
-        results = get_weather(self.zip, faren=True, parse_city=True)
-        if not results:
-            raise ValueError("Failed to find weather data for location: " +\
-                             repr(self.zip))
+    def __init__(self, location, time=None):
+        self._now = datetime.now() if not time else time
 
-        self.temp, self.desc, self.city = results
-        sunrise = self._now.replace(hour=6, minute=30)
-        sunset  = self._now.replace(hour=9)
-        self.peaks = (
-            (sunrise - datetime.timedelta(hours=1), sunrise),
-            (sunset  - datetime.timedelta(hours=1), sunset))
+        self.city, self.zip = get_city(location)
+        self.temp, self.desc, _ = get_weather(self.zip, faren=True)
+        self.peaks = get_peak_times(location)
 
         if self.desc not in self.WEATHER:
             self.icon, self.color = ICONS["default"]
@@ -219,18 +227,29 @@ def get_peak_times(location):
     We create a range of times for each peak, where the peak is considered to
     take place about half an hour before and after the peak time.
     """
+
     response = requests.get(SUN_URL % location)
     times = response.json()
 
     sunrise = times["results"]["sunrise"]
     sunset  = times["results"]["sunset"]
-    sunrise = datetime.datetime.strptime(sunrise, "%I:%M:%S %p")
-    sunset  = datetime.datetime.strptime(sunset,  "%I:%M:%S %p")
+    sunrise = datetime.strptime(sunrise, "%I:%M:%S %p")
+    sunset  = datetime.strptime(sunset,  "%I:%M:%S %p")
+
+    # Now, determine our timezone so we can get proper offsets, because the
+    # times are originally in UTC.
+    response = requests.get(TZ_URL % (location[0], location[1], int(time.time())))
+    timezone = response.json()
+    offset   = timedelta(seconds=timezone["rawOffset"])
+    offset  += timedelta(seconds=timezone["dstOffset"])
+
+    sunrise += offset
+    sunset  += offset
     return (
-        (sunrise - datetime.timedelta(minutes=30),
-         sunrise + datetime.timedelta(minutes=30)),
-        (sunset  - datetime.timedelta(minutes=30),
-         sunset  + datetime.timedelta(minutes=30)),
+        (sunrise - timedelta(minutes=30),
+         sunrise + timedelta(minutes=30)),
+        (sunset  - timedelta(minutes=30),
+         sunset  + timedelta(minutes=30)),
     )
 
 def get_location():
@@ -321,26 +340,26 @@ def main():
 
     # We don't need API key validation in zipcode mode.
     if not args.zipcode:
-        global API_KEYS, IP_URL, LOC_URL
+        global API_KEYS, IP_URL, LOC_URL, TZ_URL
         with open(args.keyfile, "r") as f:
             API_KEYS = tuple(f.read().strip().split())
-            if len(API_KEYS) != 2:
+            if len(API_KEYS) != 3:
                 print "API keyfile (at %s) must have 2 keys, one per line, " \
-                      "for the geolocate and geocode APIs, respectively." % (
-                        args.keyfile)
+                      "for the geolocate, geocode, and timezone APIs, " \
+                      "respectively." % (args.keyfile)
                 sys.exit(1)
 
             IP_URL  += API_KEYS[0]
             LOC_URL += API_KEYS[1]
+            TZ_URL  += API_KEYS[2]
 
     if args.zipcode:
         loc = args.zipcode
     else:
-        loc = get_location() if not args.coords \
-                             else tuple(map(float, args.coords.split(',')))
+        loc = get_location() if not args.coords else tuple(args.coords)
 
     if args.mode == "weather":
-        w = SimpleWeather(args.zipcode) if args.zipcode else Weather(loc)
+        w = SimpleWeather(args.zipcode) if args.zipcode else SmartWeather(loc)
         print w.block
 
     elif args.mode == "location":
