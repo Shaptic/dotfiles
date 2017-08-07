@@ -44,6 +44,10 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
         - These are all combined for a unique (icon, color) combination for the
           current weather in that city.
 
+    If you pass `-z` with a zipcode value, we don't perform any coordinate
+    lookups, so you can get API-key-less functionality. This means you don't get
+    location-aware weather, though.
+
     NOTE: Only locations in the United States are supported, because the
           AccuWeather API uses postal codes for lookups in the RSS feed.
 
@@ -59,6 +63,8 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
     directory as the weather script (by default). This can be changed by passing
     in `--keyfile`. Don't forget to add the file to your .gitignore (if
     applicable) to be safe :)
+
+    NOTE: This isn't necessary in `--zipcode` mode.
 
     Usage
     =====
@@ -336,7 +342,7 @@ def main():
 
     elif args.mode == "location":
         print loc
-        pprint.pprint(get_city(loc))
+        print "%s | %s" % get_city(loc)
 
     elif args.mode == "test-i3":
         print "long test"
