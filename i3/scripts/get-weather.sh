@@ -5,8 +5,10 @@ else
   LOC=98033
 fi
 
-URL="http://rss.accuweather.com/rss/liveweather_rss.asp?metric=0&locCode=$LOC"
-OUT=$(curl -s $URL | grep "Currently in")
+URL="https://www.accuweather.com/en/us/kirkland-wa/98033/weather-forecast/341298"
+OUT=$(curl -s $URL)
+# URL="http://rss.accuweather.com/rss/liveweather_rss.asp?metric=0&locCode=$LOC"
+# OUT=$(curl -s $URL | grep "Currently in")
 if [[ $? -ne 0 ]]; then
   echo "[no weather]"
   echo "[n/a]"
@@ -14,18 +16,21 @@ if [[ $? -ne 0 ]]; then
   exit
 fi
 
-CITY=$(echo $OUT | grep -oP "Currently in (.*):" | sed -s 's/Currently in //;s/://')
-OUT=$(echo $OUT | awk -F: '{print $2}')
+temp=$(echo $OUT | pup .realfeel text{} | head -n 1 | awk '{print $2}' | sed -s 's/°//')
+weather=$(echo $OUT | pup .cond text{} | head -n 1)
+CITY="Kirkland, WA"
+# CITY=$(echo $OUT | grep -oP "Currently in (.*):" | sed -s 's/Currently in //;s/://')
+# OUT=$(echo $OUT | awk -F: '{print $2}')
 
-temp=$(echo $OUT | awk '{print $1}')
-weather=$(echo $OUT | sed -s 's/.*and //;s/\s//g')
+# temp=$(echo $OUT | awk '{print $1}')
+# weather=$(echo $OUT | sed -s 's/.*and //;s/\s//g')
 
 OUTPUT="$temp°"
 
 # Clear: Sun during day, Moon at night.
 if [[ "$weather" == "Clear" ]]; then
   H=$(date +%H)
-  if (($H >= 21)); then
+  if (($H >= 21 || $H <= 7)); then
     OUTPUT="$OUTPUT🌙"
     COLOR="#67809F"
   else

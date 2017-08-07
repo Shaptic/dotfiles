@@ -1,15 +1,24 @@
 {
 	"WrapPlus.wrap_width": 80,
 	"always_show_minimap_viewport": true,
+	"auto_complete_triggers":
+	[
+		{
+			"characters": ".",
+			"selector": "source.python"
+		}
+	],
 	"auto_find_in_selection": true,
+	"bold_folder_labels": true,
 	"caret_style": "phase",
 	"color_inactive_tabs": true,
-	"color_scheme": "Packages/Theme - Afterglow/Afterglow-monokai.tmTheme",
+	"color_scheme": "Packages/Agila Theme/Agila Origin Oceanic Next.tmTheme",
 	"dpi_scale": 1.5,
 	"drag_text": false,
 	"draw_white_space": "all",
 	"enable_telemetry": "disabled",
 	"ensure_newline_at_eof_on_save": true,
+	"fade_fold_buttons": false,
 	"font_face": "Inconsolata",
 	"font_size": 11,
 	"highlight_line": true,
@@ -18,7 +27,10 @@
 	[
 		"Vintage"
 	],
+	"line_padding_bottom": 1,
+	"line_padding_top": 1,
 	"margin": 0,
+	"overlay_scroll_bars": "enabled",
 	"rulers":
 	[
 		80,
@@ -34,7 +46,7 @@
 	"tab_size": 4,
 	"tabs_padding_medium": true,
 	"tabs_small": true,
-	"theme": "Afterglow-blue.sublime-theme",
+	"theme": "Boxy Ocean.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
 	"trim_trailing_white_space_on_save": true,

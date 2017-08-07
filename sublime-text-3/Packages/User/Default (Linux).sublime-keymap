@@ -12,5 +12,14 @@
         "keys": ["alt+ctrl+down"],
         "command": "select_lines",
         "args": {"forward": true}
+    }, {
+        "command": "sublime_jedi_docstring", "keys": ["ctrl+alt+d"],
+        "context": [
+            {
+                "key": "selector",
+                "operator": "equal",
+                "operand":  "source.python - string - comment"
+            }
+        ]
     }
 ]

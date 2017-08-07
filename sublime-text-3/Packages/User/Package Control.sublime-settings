@@ -5,9 +5,16 @@
 	],
 	"installed_packages":
 	[
+		"A File Icon",
+		"Agila Theme",
+		"Boxy Theme",
+		"Color Highlighter",
+		"GitGutter",
+		"Jedi - Python autocompletion",
 		"Markdown Extended",
 		"Package Control",
 		"PackageResourceViewer",
+		"Python Improved",
 		"Theme - Afterglow",
 		"Wrap Plus"
 	]
