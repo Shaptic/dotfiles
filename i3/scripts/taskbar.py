@@ -4,8 +4,6 @@
 """ A taskbar manager for i3blocks.
 
 TODO: Better error-handling.
-      Celsius support.
-      Better location testing.
       Investigate a better weather API for international lookups?
       Support $BLOCK_BUTTON from i3blocks for opening up a full weather page?
 """
@@ -30,41 +28,41 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
         - location
         - peaks
 
-    Location Mode
-    =============
-    This mode is _not_ i3blocks compatible, it is only used for determining the
-    current approximate coordinates and city based on the current public IP
+     Location Mode
+    ===============
+    This mode is _not_ i3blocks compatible; it is used for quickly determining
+    the current approximate coordinates and city based on the current public IP
     address.
 
-    Weather Mode
-    ============
+     Peak Mode
+    ===========
+    This mode is also _not_ i3blocks compatible; it only provides a way to
+    directly retrieve sunrise and sunset times for the current location.
+
+     Weather Mode
+    ==============
     This provides location-aware weather based on IP address geolocation. We
     determine the location just like in Location Mode, via a Google API, unless
-    it's provided via `--zipcode` or `--coord` mode. Then, we analyze the
-    weather data at the location:
+    it's provided via `--zip` or `--coord` mode. Then, we analyze the weather
+    data at the location:
 
         - The current city, which is used in the "full" output.
-        - The current "peak" times -- the sunrise and sunset -- for that date,
+        - The current "peak" times -- sunrise and sunset -- for that date,
           which, on a "clear" day, show special icons around that time period.
         - These are all combined for a unique (icon, color) combination for the
           current weather in that city.
 
-    If you pass `-z` with a zipcode value, we don't perform any coordinate
+    If you pass `-z` with a postal code value, we don't perform any coordinate
     lookups, so you can get API-key-less functionality. This means you don't get
-    location-aware weather, though.
+    dynamic weather location, though.
 
     NOTE: Only locations in the United States are supported, because the
           AccuWeather API uses postal codes for lookups in the RSS feed.
 
-    Peak Mode
-    =========
-    Provides a way to directly retrieve sunrise and sunset times from the
-    current location.
-
-    API Keys
-    ========
+     API Keys
+    ==========
     Because we use Google's APIs, there need to be API keys present for the
-    calls to work. It's trivial to get one, just go to these links:
+    dynamic calls to work. It's trivial to get them, just go to these links:
 
         https://developers.google.com/maps/documentation/geocoding/get-api-key
         https://developers.google.com/maps/documentation/geolocation/get-api-key
@@ -75,23 +73,16 @@ DESCRIPTION = """Creates various blocks for the i3blocks taskbar.
     in `--keyfile`. Don't forget to add the file to your .gitignore (if
     applicable) to be safe :)
 
-    NOTE: This isn't necessary in `--zipcode` mode.
-
-    Usage
-    =====
+     Usage
+    =======
     In your .i3blocks.conf file, add this block for weather support (with
-    whatever interval you want, but be wary of API rate-limiting):
+    whatever interval you want, but be wary of API rate-limiting), don't forget
+    to mark it executable:
 
         [weather]
         command=taskbar.py weather
         interval=360
 """
-        # raise NotImplemented
-        # - The current weather, using the AccuWeather RSS API, which
-        #   unfortunately does not provide the "real feel" data. Try passing the
-        #   experimental `--real-feel` flag. This _must be_ combined with
-        #   `--weather-url`, because dynamically determining the AccuWeather
-        #   "real" path (the one you view in the browser) is not supported yet.
 
 # https://developers.google.com/maps/documentation/geolocation/
 # https://developers.google.com/maps/documentation/geocoding/
@@ -120,7 +111,7 @@ ICONS = {
     "Partly Cloudy":(u"🌥", "#67809F"),
     "Sunrise":      (u"🌅", "#E26A6A"),
     "Sunset":       (u"🌅", "#E26A6A"),
-    "default":      (u"",   "#C5EFF7"),
+    "default":      (u"?",  "#C5EFF7"),
 }
 
 
@@ -132,20 +123,17 @@ class SimpleWeather(object):
                     defaulting to the current time
     """
 
-    def __init__(self, zipcode, time=None):
+    def __init__(self, zipcode, time=None, faren=True):
         self._now = datetime.now() if not time else time
         self.zip = zipcode
-        results = get_weather(self.zip, faren=True, parse_city=True)
+        results = get_weather(self.zip, faren=faren, parse_city=True)
         if not results:
-            raise ValueError("Failed to find weather data for location: " +\
-                             repr(self.zip))
+            self.temp = 0
+            self.desc = "default"
+        else:
+            self.temp, self.desc, self.city = results
 
-        self.temp, self.desc, self.city = results
-        sunrise = self._now.replace(hour=6, minute=30)
-        sunset  = self._now.replace(hour=9)
-        self.peaks = (
-            (sunrise - timedelta(hours=1), sunrise),
-            (sunset  - timedelta(hours=1), sunset))
+        self.peaks = get_peak_times(None, skip=True)
 
         if self.desc not in self.WEATHER:
             self.icon, self.color = ICONS["default"]
@@ -214,11 +202,11 @@ class SmartWeather(SimpleWeather):
                         defaulting to the current time
     """
 
-    def __init__(self, location, time=None):
+    def __init__(self, location, time=None, faren=True):
         self._now = datetime.now() if not time else time
 
         self.city, self.zip = get_city(location)
-        self.temp, self.desc, _ = get_weather(self.zip, faren=True)
+        self.temp, self.desc, _ = get_weather(self.zip, faren=faren)
         self.peaks = get_peak_times(location)
 
         if self.desc not in self.WEATHER:
@@ -227,30 +215,38 @@ class SmartWeather(SimpleWeather):
             self.icon, self.color = self.WEATHER[self.desc](self, self.desc)
 
 
-def get_peak_times(location):
+def get_peak_times(location, skip=False):
     """ Retrieves sunrise and sunset times for certain coordinates.
 
     We create a range of times for each peak, where the peak is considered to
     take place about half an hour before and after the peak time.
     """
+    if not skip:
+        response = requests.get(SUN_URL % location)
+        times = response.json()
 
-    response = requests.get(SUN_URL % location)
-    times = response.json()
+    if skip or times.status_code != 200:    # ballpark it
+        now = datetime.now()
+        sunrise = now.replace(hour=6)
+        sunset  = now.replace(hour=8, minute=30)
 
-    sunrise = times["results"]["sunrise"]
-    sunset  = times["results"]["sunset"]
-    sunrise = datetime.strptime(sunrise, "%I:%M:%S %p")
-    sunset  = datetime.strptime(sunset,  "%I:%M:%S %p")
+    else:
+        sunrise = times["results"]["sunrise"]
+        sunset  = times["results"]["sunset"]
+        sunrise = datetime.strptime(sunrise, "%I:%M:%S %p")
+        sunset  = datetime.strptime(sunset,  "%I:%M:%S %p")
 
-    # Now, determine our timezone so we can get proper offsets, because the
-    # times are originally in UTC.
-    response = requests.get(TZ_URL % (location[0], location[1], int(time.time())))
-    timezone = response.json()
+        # Now, determine our timezone so we can get proper offsets, because the
+        # times are originally in UTC.
+        response = requests.get(TZ_URL % (location[0], location[1],
+                                          int(time.time())))
+        timezone = response.json()
 
-    offset   = timedelta(seconds=timezone["rawOffset"])
-    offset  += timedelta(seconds=timezone["dstOffset"])
-    sunrise += offset
-    sunset  += offset
+        offset   = timedelta(seconds=timezone["rawOffset"])
+        offset  += timedelta(seconds=timezone["dstOffset"])
+        sunrise += offset
+        sunset  += offset
+
     return (
         (sunrise - timedelta(minutes=30),
          sunrise + timedelta(minutes=30)),
@@ -330,13 +326,14 @@ def main():
     parser.add_argument("mode", help="one of " + repr(MODES) + " indicating "
                                      "the block you wish to generate (or task "
                                      "you wish to perform)")
-    parser.add_argument("-c", "--coords", metavar=("lat","long"), nargs=2,
-                        type=float,
+    parser.add_argument("--coords", metavar=("lat","long"), nargs=2, type=float,
                         help="performs actions for the specified [mode] at the "
                              "specified location")
-    parser.add_argument("-f", "--keyfile", metavar="path", default=KEYPATH,
+    parser.add_argument("-c", "--celsius", default=False, action="store_true",
+                        help="shows temperature in Celsius")
+    parser.add_argument("-f", "--keyfile", metavar="", default=KEYPATH,
                         help="path pointing to your Google API keys")
-    parser.add_argument("-z", "--zipcode", metavar="code", type=int,
+    parser.add_argument("-z", "--zip", metavar="code", type=int,
                         help="skips all coordinate lookups and does the most "
                              "that's possible with a zipcode")
     args = parser.parse_args()
@@ -368,7 +365,10 @@ def main():
         parser.error("--zipcode should only be used in weather mode")
 
     if args.mode == "weather":
-        w = SimpleWeather(args.zipcode) if args.zipcode else SmartWeather(loc)
+        if args.zipcode:
+            w = SimpleWeather(args.zipcode, faren=not args.celsius)
+        else:
+            w = SmartWeather(loc, faren=not args.celsius)
         print w.block
 
     elif args.mode == "location":
