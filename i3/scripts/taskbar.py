@@ -104,13 +104,16 @@ WeatherBlock = BlockOutput(u"%d°%s (%s)",   # temperature, icon, city
                            "%s")            # color based on weather
 ICONS = {
     "Clear":        (u"🌙", "#67809F"),
+    "Mostly Clear": (u"🌙", "#67809F"),
     "DayClear":     (u"☀", "#22A7F0"),
     "Sunny":        (u"☀", "#F9BF3B"),
     "Partly Sunny": (u"🌤", "#F5D76E"),
     "Cloudy":       (u"☁", "#6C7A89"),
+    "Intermittent Clouds":
+                    (u"🌤", "#F5D76E"),
     "Partly Cloudy":(u"🌥", "#67809F"),
     "Mostly Cloudy":(u"🌥", "#67809F"),
-    "Sunrise":      (u"🌅", "#E26A6A"),
+    "Sunrise":      (u"🌄", "#E26A6A"),
     "Sunset":       (u"🌅", "#E26A6A"),
     "default":      (u"",  "#C5EFF7"),
 }
@@ -160,11 +163,12 @@ class SimpleWeather(object):
 
     def on_sunny(self, desc):
         retval = self.on_sunset()
-        return retval if retval else ICONS["Sunny"]
+        return retval if retval else ICONS[desc]
 
     def on_simple(self, desc):
-        if desc not in ICONS: return ICONS["default"]
-        return ICONS[desc]
+        icon, color = ICONS["default"] if desc not in ICONS else ICONS[desc]
+        if self.is_nighttime: color = ICONS["Clear"][1]
+        return icon, color
 
     def is_sunrise(self):
         return self._now >= self.peaks[0][0] and self._now <= self.peaks[0][1]
@@ -186,10 +190,20 @@ class SimpleWeather(object):
     def block(self):
         return "\n".join((self.full, self.short, self.color))
 
+    @property
+    def is_nighttime(self):
+        now = datetime.now()
+        sun_end = self.peaks[1][1]
+        sun_start = self.peaks[0][0]
+        return now.hour > sun_end.hour or now.hour < sun_start.hour
+
     WEATHER = {
         "Clear":        on_clear,
+        "Mostly Clear": on_clear,
         "Sunny":        on_sunny,
         "Partly Sunny": on_simple,
+        "Intermittent Clouds":
+                        on_simple,
         "Partly Cloudy":on_simple,
         "Mostly Cloudy":on_simple,
         "Cloudy":       on_simple,
@@ -233,7 +247,7 @@ def get_peak_times(location, skip=False):
     now = datetime.now()
     if skip or response.status_code != 200:    # ballpark it
         sunrise = now.replace(hour=6)
-        sunset  = now.replace(hour=8, minute=30)
+        sunset  = now.replace(hour=20, minute=30)
 
     else:
         times = response.json()
@@ -276,10 +290,10 @@ def get_location():
     j = response.json()
     return tuple(j["location"].values())
 
-def get_city(location):
+def get_city(coordinates):
     """ Retrieves the approximate city at some coordinates.
     """
-    response = requests.get(LOC_URL % ','.join([str(x) for x in location]))
+    response = requests.get(LOC_URL % ','.join([str(x) for x in coordinates]))
     j = response.json()
 
     city, state, country, postal = "", "", "", 0
@@ -309,6 +323,9 @@ def get_weather(zip_code, faren=True, parse_city=False):
     """ Retrieves the current weather (temp, description) at a zip code.
     """
     response = requests.get(TMP_URL % (int(not faren), zip_code))
+    if response.status_code != 200:
+        raise ValueError("failed to retrieve weather.")
+
     xml = minidom.parseString(response.text)
     items = xml.getElementsByTagName("item")
     if not items: return None
@@ -400,4 +417,8 @@ def main():
         print "#FFFFFF"
 
 if __name__ == '__main__':
+    # try:
     main()
+    #     print "[no weather]"
+    #     print "[n/a]"
+    #     print "#E26A6A"
