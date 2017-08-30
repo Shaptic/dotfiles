@@ -108,6 +108,7 @@ ICONS = {
     "DayClear":     (u"☀", "#22A7F0"),
     "Sunny":        (u"☀", "#F9BF3B"),
     "Partly Sunny": (u"🌤", "#F5D76E"),
+    "Mostly Sunny": (u"🌤", "#F5D76E"),
     "Cloudy":       (u"☁", "#6C7A89"),
     "Intermittent Clouds":
                     (u"🌤", "#F5D76E"),
@@ -202,6 +203,7 @@ class SimpleWeather(object):
         "Mostly Clear": on_clear,
         "Sunny":        on_sunny,
         "Partly Sunny": on_simple,
+        "Mostly Sunny": on_sunny,
         "Intermittent Clouds":
                         on_simple,
         "Partly Cloudy":on_simple,
@@ -345,29 +347,7 @@ def get_weather(zip_code, faren=True, parse_city=False):
 
     return temp, status, city
 
-def main():
-    MODES = ("weather", "peaks", "location", "test-i3")
-    parser = argparse.ArgumentParser(description=DESCRIPTION,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("mode", help="one of " + repr(MODES) + " indicating "
-                                     "the block you wish to generate (or task "
-                                     "you wish to perform)")
-    parser.add_argument("--coords", metavar=("lat","long"), nargs=2, type=float,
-                        help="performs actions for the specified [mode] at the "
-                             "specified location")
-    parser.add_argument("-c", "--celsius", default=False, action="store_true",
-                        help="shows temperature in Celsius")
-    parser.add_argument("-f", "--keyfile", metavar="", default=KEYPATH,
-                        help="path pointing to your Google API keys")
-    parser.add_argument("-z", "--zip", metavar="code", type=int,
-                        help="skips all coordinate lookups and does the most "
-                             "that's possible with a zipcode")
-    args = parser.parse_args()
-
-    if args.mode not in MODES:
-        print "Valid modes are: %s" % ','.join(MODES)
-        sys.exit(1)
-
+def main(args):
     # We don't need API key validation in zipcode mode.
     if not args.zip:
         global API_KEYS, IP_URL, LOC_URL, TZ_URL
@@ -417,8 +397,33 @@ def main():
         print "#FFFFFF"
 
 if __name__ == '__main__':
-    # try:
-    main()
-    #     print "[no weather]"
-    #     print "[n/a]"
-    #     print "#E26A6A"
+    MODES = ("weather", "peaks", "location", "test-i3")
+    parser = argparse.ArgumentParser(
+        description=DESCRIPTION,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    parser.add_argument("mode", choices=MODES,
+                        help="one of " + repr(MODES) + " indicating the block "
+                             "to generate (or task to perform)")
+    parser.add_argument("--coords", metavar=("lat","long"), nargs=2, type=float,
+                        help="performs actions for the specified [mode] at the "
+                             "specified location")
+    parser.add_argument("-q", "--hide-on-fail", dest="q", action="store_true",
+                        help="on failure, output nothing, so that the block "
+                             "is hidden from the bar")
+    parser.add_argument("-c", "--celsius", default=False, action="store_true",
+                        help="shows temperature in Celsius")
+    parser.add_argument("-f", "--keyfile", metavar="", default=KEYPATH,
+                        help="path pointing to your Google API keys")
+    parser.add_argument("-z", "--zip", metavar="code", type=int,
+                        help="skips all coordinate lookups and does the most "
+                             "that's possible with a zipcode")
+    args = parser.parse_args()
+
+    try:
+        main(args)
+    except:
+        if not args.q:
+            print "[no weather]"
+            print "[n/a]"
+            print "#E26A6A"
