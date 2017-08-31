@@ -1,26 +1,19 @@
 {
 	"WrapPlus.wrap_width": 80,
 	"always_show_minimap_viewport": true,
-	"auto_complete_triggers":
-	[
-		{
-			"characters": ".",
-			"selector": "source.python"
-		}
-	],
 	"auto_find_in_selection": true,
 	"bold_folder_labels": true,
 	"caret_style": "phase",
 	"color_inactive_tabs": true,
 	"color_scheme": "Packages/Agila Theme/Agila Origin Oceanic Next.tmTheme",
-	"dpi_scale": 1.5,
+	"dpi_scale": 1.8,
 	"drag_text": false,
 	"draw_white_space": "all",
 	"enable_telemetry": "disabled",
 	"ensure_newline_at_eof_on_save": true,
 	"fade_fold_buttons": false,
 	"font_face": "Inconsolata",
-	"font_size": 11,
+	"font_size": 9,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
@@ -28,7 +21,7 @@
 		"Vintage"
 	],
 	"line_padding_bottom": 1,
-	"line_padding_top": 1,
+	"line_padding_top": 0,
 	"margin": 0,
 	"overlay_scroll_bars": "enabled",
 	"rulers":
@@ -40,7 +33,7 @@
 	"shift_tab_unindent": true,
 	"show_encoding": true,
 	"show_line_endings": true,
-	"sidebar_size_14": true,
+	"sidebar_size_12": true,
 	"status_bar_brighter": true,
 	"tab_completion": true,
 	"tab_size": 4,
