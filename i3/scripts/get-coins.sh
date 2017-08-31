@@ -10,6 +10,7 @@ DOWNCOLOR="#EF4836"
 if [[ "$#" == "0" || "$1" == "eth" ]]; then
   LOGO=$ETH
   RESULT=$(curl -s https://www.bitstamp.net/api/v2/ticker/ethusd)
+
 elif [[ "$1" == "btc" ]]; then
   LOGO=$BTC
   RESULT=$(curl -s https://www.bitstamp.net/api/v2/ticker/btcusd)
