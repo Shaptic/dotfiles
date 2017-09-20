@@ -179,9 +179,9 @@
 <key>background</key>
 <string>#1B2B35FF</string>
 <key>foreground</key>
-<string>#FFFF0000</string>
+<string>#5bbad5FF</string>
 <key>caret</key>
-<string>#4C4C00FF</string>
+<string>#2989A4FF</string>
 </dict>
 </dict>
 
