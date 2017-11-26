@@ -4,7 +4,7 @@ i3-msg 'workspace 3;
     exec thunderbird;
     workspace 4;
     layout splith;
-    exec spotify;
+    exec spotify --force-device-scale-factor=1.5;
     exec slack;
     workspace 4;'
 

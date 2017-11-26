@@ -1,9 +1,9 @@
 {
-	"color_scheme": "Packages/Agila Theme/Markdown/Oceanic Next Origin Markdown.tmTheme",
-	"extensions":
-	[
-		"md"
-	],
+    "color_scheme": "Packages/Agila Theme/Markdown/Oceanic Next Origin Markdown.tmTheme",
+    "extensions":
+    [
+        "md"
+    ],
     "draw_centered": true,
     "draw_indent_guides": false,
     "tab_size": 2,

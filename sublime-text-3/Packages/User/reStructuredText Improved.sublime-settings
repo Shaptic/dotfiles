@@ -1,0 +1,12 @@
+// These settings override both User and Default settings for the reStructuredText Improved syntax
+{
+    "extensions":
+    [
+        "rst"
+    ],
+    "draw_centered": true,
+    "draw_indent_guides": false,
+    "tab_size": 3,
+    "word_wrap": true,
+    "wrap_width": 85
+}
