@@ -53,18 +53,19 @@ if [[ "$1" == "btc" || "$1" == "eth" ]]; then
 
 elif [[ "$1" == "iota" ]]; then
   RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=IOTAETH)
-  PRICE=$(echo $RESULT | jq '.lastPrice' | sed -s s/\"//g)
-  PREV=$( echo $RESULT | jq '.openPrice' | sed -s s/\"//g)
+  PRICE=$(echo $RESULT | jq '.lastPrice | tonumber')
+  PREV=$( echo $RESULT | jq '.openPrice | tonumber')
   get_price "eth"
-  ETHPRICE=$RV
-  PRICE=$(echo "$PRICE $ETHPRICE" | awk '{printf "%0.2f\n",$1 * $2}')
+  PRICE=$(echo "$PRICE $RV" | awk '{printf "%0.2f\n", $1 * $2}')
 fi
 
-echo "$LOGO $PRICE"
-echo "$LOGO $PRICE"
+UP=$(bc <<< "$PRICE > $PREV")
 
-if [[ $(bc <<< "$PRICE < $PREV") -eq 1 ]]; then
-  echo $DOWNCOLOR
-else
+echo "$LOGO $PRICE"
+if [[ UP -eq 1 ]]; then
+  echo $LOGO↑
   echo $UPCOLOR
+else
+  echo $LOGO↓
+  echo $DOWNCOLOR
 fi
