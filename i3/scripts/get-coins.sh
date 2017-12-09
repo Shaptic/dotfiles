@@ -1,23 +1,40 @@
 #!/bin/bash
 ETH="Ξ"
 BTC="฿"
+IOTA="ι"
 
 PREV=0
 PRICE=0
 UPCOLOR="#2ECC71"
 DOWNCOLOR="#EF4836"
 
-YDAY=$(date -d "yesterday 13:00" '+%Y-%m-%d')
+
+function get_price {
+  local SYMBOL=""
+  if [[ "$#" == "0" || "$1" == "eth" ]]; then
+    SYMBOL="ETH-USD"
+
+  elif [[ "$1" == "btc" ]]; then
+    SYMBOL="BTC-USD"
+  fi
+
+  local PARAMS=""
+  if [[ "$#" == 2 && "$2" == "yday" ]]; then
+    YDAY=$(date -d "yesterday 13:00" '+%Y-%m-%d')
+    PARAMS="?date=$YDAY"
+  fi
+
+  RV=$(curl -s https://api.coinbase.com/v2/prices/$SYMBOL/spot$PARAMS | jq '.data.amount | tonumber')
+}
 
 if [[ "$#" == "0" || "$1" == "eth" ]]; then
   LOGO=$ETH
-  RESULT=$(curl -s https://api.coinbase.com/v2/prices/ETH-USD/spot)
-  PREV=$(  curl -s https://api.coinbase.com/v2/prices/ETH-USD/spot?date=$YDAY)
 
 elif [[ "$1" == "btc" ]]; then
   LOGO=$BTC
-  RESULT=$(curl -s https://api.coinbase.com/v2/prices/BTC-USD/spot)
-  PREV=$(  curl -s https://api.coinbase.com/v2/prices/BTC-USD/spot?date=$YDAY)
+
+elif [[ "$1" == "iota" ]]; then
+  LOGO=$IOTA
 fi
 
 # Show nothing if the API call fails (probably no internet)
@@ -28,8 +45,20 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-PRICE=$(echo $RESULT | jq '.data.amount' | sed -s s/\"//g)
-PREV=$( echo $PREV   | jq '.data.amount' | sed -s s/\"//g)
+if [[ "$1" == "btc" || "$1" == "eth" ]]; then
+  get_price $1
+  PRICE=$RV
+  get_price $1 "yday"
+  PREV=$RV
+
+elif [[ "$1" == "iota" ]]; then
+  RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=IOTAETH)
+  PRICE=$(echo $RESULT | jq '.lastPrice' | sed -s s/\"//g)
+  PREV=$( echo $RESULT | jq '.openPrice' | sed -s s/\"//g)
+  get_price "eth"
+  ETHPRICE=$RV
+  PRICE=$(echo "$PRICE $ETHPRICE" | awk '{printf "%0.2f\n",$1 * $2}')
+fi
 
 echo "$LOGO $PRICE"
 echo "$LOGO $PRICE"
