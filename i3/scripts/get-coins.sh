@@ -1,6 +1,7 @@
 #!/bin/bash
 ETH="Ξ"
 BTC="฿"
+LTC="Ł"
 IOTA="ι"
 
 PREV=0
@@ -16,6 +17,10 @@ function get_price {
 
   elif [[ "$1" == "btc" ]]; then
     SYMBOL="BTC-USD"
+
+  elif [[ "$1" == "ltc" ]]; then
+    SYMBOL="LTC-USD"
+
   fi
 
   local PARAMS=""
@@ -24,11 +29,14 @@ function get_price {
     PARAMS="?date=$YDAY"
   fi
 
-  RV=$(curl -s https://api.coinbase.com/v2/prices/$SYMBOL/spot$PARAMS | jq '.data.amount | tonumber')
+  RV=$(curl -s https://api.coinbase.com/v2/prices/$SYMBOL/spot$PARAMS | jq '.data.amount' | sed -s s/\"//g)
 }
 
 if [[ "$#" == "0" || "$1" == "eth" ]]; then
   LOGO=$ETH
+
+elif [[ "$1" == "ltc" ]]; then
+  LOGO=$LTC
 
 elif [[ "$1" == "btc" ]]; then
   LOGO=$BTC
@@ -45,7 +53,7 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-if [[ "$1" == "btc" || "$1" == "eth" ]]; then
+if [[ "$1" == "btc" || "$1" == "eth" || "$1" == "ltc" ]]; then
   get_price $1
   PRICE=$RV
   get_price $1 "yday"
@@ -53,8 +61,8 @@ if [[ "$1" == "btc" || "$1" == "eth" ]]; then
 
 elif [[ "$1" == "iota" ]]; then
   RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=IOTAETH)
-  PRICE=$(echo $RESULT | jq '.lastPrice | tonumber')
-  PREV=$( echo $RESULT | jq '.openPrice | tonumber')
+  PRICE=$(echo $RESULT | jq '.lastPrice' | sed -s s/\"//g)
+  PREV=$( echo $RESULT | jq '.openPrice' | sed -s s/\"//g)
   get_price "eth"
   PRICE=$(echo "$PRICE $RV" | awk '{printf "%0.2f\n", $1 * $2}')
 fi
