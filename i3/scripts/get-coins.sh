@@ -10,7 +10,7 @@ UPCOLOR="#2ECC71"
 DOWNCOLOR="#EF4836"
 
 
-function get_price {
+function get_price_coinbase {
   local SYMBOL=""
   if [[ "$#" == "0" || "$1" == "eth" ]]; then
     SYMBOL="ETH-USD"
@@ -25,12 +25,25 @@ function get_price {
 
   local PARAMS=""
   if [[ "$#" == 2 && "$2" == "yday" ]]; then
-    YDAY=$(date -d "yesterday 13:00" '+%Y-%m-%d')
+    YDAY=$(date -d "yesterday" '+%Y-%m-%d')
     PARAMS="?date=$YDAY"
   fi
 
   RV=$(curl -s https://api.coinbase.com/v2/prices/$SYMBOL/spot$PARAMS | jq '.data.amount' | sed -s s/\"//g)
 }
+
+
+function get_price_binance {
+  if [[ "$1" == "iota" ]]; then
+    SYMBOL="IOTAETH"
+  fi
+
+  local RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=IOTAETH)
+
+  RV1=$(echo $RESULT | jq '.lastPrice' | sed -s s/\"//g)
+  RV2=$(echo $RESULT | jq '.openPrice' | sed -s s/\"//g)
+}
+
 
 if [[ "$#" == "0" || "$1" == "eth" ]]; then
   LOGO=$ETH
@@ -43,27 +56,33 @@ elif [[ "$1" == "btc" ]]; then
 
 elif [[ "$1" == "iota" ]]; then
   LOGO=$IOTA
+
+else
+  echo "[invalid coin]"
+  echo "n/a"
+  echo $DOWNCOLOR
+  exit 1
 fi
 
 # Show nothing if the API call fails (probably no internet)
 if [[ $? -ne 0 ]]; then
   echo ""
   echo ""
-  echo "#FF0000"
+  echo $DOWNCOLOR
   exit 1
 fi
 
 if [[ "$1" == "btc" || "$1" == "eth" || "$1" == "ltc" ]]; then
-  get_price $1
+  get_price_coinbase $1
   PRICE=$RV
-  get_price $1 "yday"
+  get_price_coinbase $1 "yday"
   PREV=$RV
 
 elif [[ "$1" == "iota" ]]; then
-  RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=IOTAETH)
-  PRICE=$(echo $RESULT | jq '.lastPrice' | sed -s s/\"//g)
-  PREV=$( echo $RESULT | jq '.openPrice' | sed -s s/\"//g)
-  get_price "eth"
+  get_price_binance "iota"
+  PRICE=$RV1
+  PREV=$RV2
+  get_price_coinbase "eth"
   PRICE=$(echo "$PRICE $RV" | awk '{printf "%0.2f\n", $1 * $2}')
 fi
 
