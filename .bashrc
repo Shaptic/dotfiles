@@ -172,8 +172,8 @@ __prompt() {
     CMDICON="$RED×$NOCOL"
   fi
 
-  EDGE="$CYAN"
-  PS1="$EDGE┌─ $CMDICON $BDCYAN\u$WHITE@$CYAN\h $BDWHITE[$BDBLUE\w$BDWHITE]"
+  EDGE="$BLUE"
+  PS1="$EDGE┌─ $CMDICON $BDBLUE\u$WHITE@$BLUE\h $BDWHITE[$BDTEAL\w$BDWHITE]"
 
   if [[ $(pwd) == *"cicada"* ]]; then
     count=$(ct | wc -l)
@@ -185,18 +185,16 @@ __prompt() {
   git status &> /dev/null
   if [[ $? -eq 0 ]]; then
     branch=$(git branch | grep \* | cut -d ' ' -f2)
-    PS1="$PS1$WHITE | $BDBLUE$branch$WHITE"
+    PS1="$PS1$WHITE | $BDPURPLE$branch$WHITE"
 
     staged=$(git status -s | egrep -c "^[MARCD] ")
     changed=$(git status -s | egrep -c "^ [MARCD]")
     added=$(git status -s | egrep -c "^\?\?")
-    PS1="$PS1$LTWHITE $CYAN+$staged$LTWHITE,$YELLOW+$changed$LTWHITE,$RED+$added"
+    PS1="$PS1$LTWHITE $GREEN+$staged$LTWHITE,$YELLOW+$changed$LTWHITE,$RED+$added"
   fi
   PS1="$PS1$BDWHITE ]"
 
-  PS1="$PS1\n$EDGE└─ $WHITE$PERM "
-  echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"
-
+  PS1="$PS1\n$EDGE└─ $WHITE$PERM $WHITE"
   PS2="    $WHITE "
 }
 

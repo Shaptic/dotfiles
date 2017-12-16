@@ -14,7 +14,7 @@ font pango:Inconsolata 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec urxvt
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -103,6 +103,9 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+exec --no-startup-id xrandr --output eDP1 --brightness 0.6
+exec --no-startup-id xrandr --output eDP1 --dpi 180
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -139,7 +142,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        font pango:Inconsolata 11
+        font pango:Inconsolata 10
         status_command i3blocks
 }
 
@@ -151,7 +154,7 @@ focus_on_window_activation focus
 hide_edge_borders both
 
 # i3-gaps configuration
-gaps inner 5
+gaps inner 3
 gaps outer 1
 smart_gaps on
 smart_borders on
@@ -164,6 +167,8 @@ for_window [class="(?i)gsimplecal"] floating enable, move position mouse
 
 # ======== Startup Configuration ======== #
 exec killall -q xfce4-notifyd
+exec killall -q xfce4-panel
+
 exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id xcompmgr -c -f -n -D 5

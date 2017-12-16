@@ -43,7 +43,7 @@ for src, dst in DIRECTORIES.items():
     # If the folder doesn't exist, create it.
     full_dst = os.path.expanduser(os.path.join(REPO_PATH, dst))
     if not os.path.exists(full_dst):
-        print "The folder '%s' doesn't exist, creating it at '%s'" % (root, full_dst)
+        print "The folder '%s' doesn't exist, creating it at '%s'" % (dst, full_dst)
         os.makedirs(full_dst)
 
     copy(os.path.join(BASE_PATH, src), full_dst)

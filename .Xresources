@@ -1,5 +1,4 @@
 xterm*dynamicColors: true
-urxvt*dynamicColors: on
 xterm*font:     *-fixed-*-*-*-20-*
 
 ! ------------------------------------------------------------------------------
@@ -10,3 +9,66 @@ rofi.color-window: #273238, #273238, #1e2529
 rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
 rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
 rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
+
+! ------------------------------------------------------------------------------
+! urxvt configuration
+! ------------------------------------------------------------------------------
+urxvt.dynamicColors: on
+urxvt.xftAntialias: true
+urxvt.scrollBar: false
+urxvt.scrollBar_right: false
+urxvt.urlLauncher: /usr/bin/firefox
+urxvt.underlineURLs: true
+
+
+urxvt.keysym.Control-Left:   \033[1;5D
+urxvt.keysym.Control-Right:  \033[1;5C
+
+urxvt.font:             xft:inconsolata:pixelsize=24:antialias=true:hinting=true, xft:DejaVu Serif:style=Italic:pixelsize=24:antialias=true,hinting=true, xft:symbola:pixelsize=24:antialias=true:hinting=true, xft:fontawesome-webfont:pixelsize=24:antialias=true:hinting=true
+urxvt.bolditalicFont:   xft:inconsolata:style=Bold:pixelsize=24:antialias=true:hinting=true
+urxvt.boldFont:         xft:inconsolata:style=Bold:pixelsize=24:antialias=true:hinting=true
+urxvt.italicFont:       xft:inconsolata:pixelsize=24:antialias=true:hinting=true
+
+xft.dpi: 192
+xft.antialias: true
+xft.hinting: true
+xft.hintStyle: hintfull
+
+! special
+urxvt.depth: 32
+urxvt.background:   rgba:0000/0000/0000/c800
+!urxvt.background:   #161b1d
+urxvt.foreground:   #7ea2b4
+urxvt.cursorColor:  #7ea2b4
+
+! black
+urxvt.color0:       #161b1d
+urxvt.color8:       #5a7b8c
+
+! red
+urxvt.color1:       #d24d72
+urxvt.color9:       #d24d72
+
+! green
+urxvt.color2:       #568c3b
+urxvt.color10:      #568c3b
+
+! yellow
+urxvt.color3:       #8a8a0f
+urxvt.color11:      #8a8a0f
+
+! blue
+urxvt.color4:       #257fad
+urxvt.color12:      #257fad
+
+! magenta
+urxvt.color5:       #5d5db1
+urxvt.color13:      #5d5db1
+
+! cyan
+urxvt.color6:       #2d8f6f
+urxvt.color14:      #2d8f6f
+
+! white
+urxvt.color7:       #7ea2b4
+urxvt.color15:      #ebf8ff
