@@ -15,19 +15,19 @@ rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
 ! ------------------------------------------------------------------------------
 urxvt.dynamicColors: on
 urxvt.xftAntialias: true
-urxvt.scrollBar: false
+urxvt.scrollBar: false✔
 urxvt.scrollBar_right: false
 urxvt.urlLauncher: /usr/bin/firefox
 urxvt.underlineURLs: true
 
-
 urxvt.keysym.Control-Left:   \033[1;5D
 urxvt.keysym.Control-Right:  \033[1;5C
 
-urxvt.font:             xft:inconsolata:pixelsize=24:antialias=true:hinting=true, xft:DejaVu Serif:style=Italic:pixelsize=24:antialias=true,hinting=true, xft:symbola:pixelsize=24:antialias=true:hinting=true, xft:fontawesome-webfont:pixelsize=24:antialias=true:hinting=true
-urxvt.bolditalicFont:   xft:inconsolata:style=Bold:pixelsize=24:antialias=true:hinting=true
-urxvt.boldFont:         xft:inconsolata:style=Bold:pixelsize=24:antialias=true:hinting=true
-urxvt.italicFont:       xft:inconsolata:pixelsize=24:antialias=true:hinting=true
+urxvt.letterSpace: -2
+urxvt.font:               xft:Source Code Pro:size=9:antialias=true,hinting=true, xft:symbola:size=9:antialias=true:hinting=true
+urxvt.boldFont:           xft:Source Code Pro:style=Bold:size=9:style=Bold:antialias=true,hinting=true
+urxvt.italicFont:         xft:Source Code Pro:style=Italic:size=9:antialias=true:hinting=true
+urxvt.bolditalicFont:     xft:Source Code Pro:style=Bold Italic:size=9:antialias=true:hinting=true
 
 xft.dpi: 192
 xft.antialias: true

@@ -142,8 +142,8 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        font pango:Inconsolata 10
-        status_command i3blocks
+        font pango:DejaVu Sans Mono 8
+        status_command i3blocks -c ~/.config/i3/i3blocks.conf
 }
 
 # ======== Visual Configuration ======== #
@@ -188,7 +188,7 @@ exec --no-startup-id xfce4-power-manager
 
 # ======== Key Bindings ======== #
 bindsym $mod+c kill
-bindsym ctrl+$mod+l exec gnome-screensaver-command -l
+bindsym ctrl+$mod+l exec light-locker-command -l
 
 bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
 bindsym --release Mod1+Shift exec pkill -SIGRTMIN+2 i3blocks
@@ -197,5 +197,6 @@ bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 
-bindsym Mod1+Tab exec rofi -i -show window -font "Droid Sans 8" -width 80 -dpi 200
+bindsym Mod1+Tab exec rofi -i -show window -font "Inconsolata 9" -width 80 -dpi 192
 bindsym ctrl+$mod+c exec --no-startup-id ~/.config/i3/workspaces/cicada.sh
+bindsym ctrl+$mod+n exec --no-startup-id firefox --new-tab ~/home/m0bius/nflx.html

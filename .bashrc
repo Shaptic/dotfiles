@@ -173,7 +173,7 @@ __prompt() {
   fi
 
   EDGE="$BLUE"
-  PS1="$EDGE┌─ $CMDICON $BDBLUE\u$WHITE@$BLUE\h $BDWHITE[$BDTEAL\w$BDWHITE]"
+  PS1="$EDGE┌─ $CMDICON $BDBLUE\u$WHITE@$BLUE\h $WHITE[$BDTEAL\w$WHITE]"
 
   if [[ $(pwd) == *"cicada"* ]]; then
     count=$(ct | wc -l)
