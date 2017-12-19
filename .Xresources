@@ -13,18 +13,24 @@ rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
 ! ------------------------------------------------------------------------------
 ! urxvt configuration
 ! ------------------------------------------------------------------------------
+urxvt.perl-ext-common:      default,matcher,clipboard
+urxvt.keysym.M-c:           perl:clipboard:copy
+urxvt.keysym.M-v:           perl:clipboard:paste
+
 urxvt.dynamicColors: on
 urxvt.xftAntialias: true
-urxvt.scrollBar: false✔
+urxvt.scrollBar: false
 urxvt.scrollBar_right: false
-urxvt.urlLauncher: /usr/bin/firefox
+
+urxvt.url-launcher: /usr/bin/firefox
+urxvt.matcher.button: 1
 urxvt.underlineURLs: true
 
 urxvt.keysym.Control-Left:   \033[1;5D
 urxvt.keysym.Control-Right:  \033[1;5C
 
-urxvt.letterSpace: -2
-urxvt.font:               xft:Source Code Pro:size=9:antialias=true,hinting=true, xft:symbola:size=9:antialias=true:hinting=true
+!urxvt.letterSpace: -2
+urxvt.font:               xft:Source Code Pro:size=9:antialias=true,hinting=true, xft:symbola:size=10:antialias=true:hinting=true
 urxvt.boldFont:           xft:Source Code Pro:style=Bold:size=9:style=Bold:antialias=true,hinting=true
 urxvt.italicFont:         xft:Source Code Pro:style=Italic:size=9:antialias=true:hinting=true
 urxvt.bolditalicFont:     xft:Source Code Pro:style=Bold Italic:size=9:antialias=true:hinting=true
@@ -37,6 +43,7 @@ xft.hintStyle: hintfull
 ! special
 urxvt.depth: 32
 urxvt.background:   rgba:0000/0000/0000/c800
+!urxvt.background:   rgba:1600/1b00/1d00/ee00
 !urxvt.background:   #161b1d
 urxvt.foreground:   #7ea2b4
 urxvt.cursorColor:  #7ea2b4

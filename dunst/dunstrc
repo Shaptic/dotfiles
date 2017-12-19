@@ -122,7 +122,7 @@
 
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
     icon_position = left
-    icon_folders = /usr/share/icons/Numix-Circle/48/apps/:/usr/share/icons/Numix/48/status/:/usr/share/icons/elementary-xfce/actions/48/:/usr/share/icons/elementary-xfce/status/48/
+    icon_folders = /usr/share/icons/Numix-Circle/48/apps/:/usr/share/icons/Numix/48/status/:/usr/share/icons/gnome/48x48/actions/:/usr/share/icons/gnome/48x48/status/
 
     # dmenu path
     dmenu = /usr/bin/dmenu -p dunst:
