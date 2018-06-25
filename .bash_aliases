@@ -14,3 +14,10 @@ alias colors='for x in {0..8}; do for i in {30..37}; do for a in {40..47}; do ec
 alias io="ssh shaptic@192.168.0.101 -p 1337"
 alias spotify="spotify --force-device-scale-factor=1.5"
 alias nflx="firefox --new-tab ~/home/m0bius/nflx.html &"
+
+function makepdf {
+  pdflatex $1.tex
+  pdflatex $1.tex
+  rm $1.out $1.log
+  evince $1.pdf
+}

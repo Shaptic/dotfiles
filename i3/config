@@ -182,7 +182,7 @@ exec --no-startup-id xinput set-prop 13 261 1.8
 exec --no-startup-id xinput set-prop 13 301 -113 -113
 
 # ======== Startup Applications ======== #
-exec --no-startup-id ~/.config/i3/scripts/prepare-workspaces.sh
+#exec --no-startup-id ~/.config/i3/scripts/prepare-workspaces.sh
 exec --no-startup-id xfce4-power-manager
 #exec --no-startup-id redshift-gtk
 

@@ -24,8 +24,11 @@ fi
 # allows config pathing for gsimplecal
 XDG_CONFIG_HOME=~/.config
 
-PATH="$HOME/.nodejs/bin:$PATH"
+#PATH="$HOME/.nodejs/bin:$PATH"
+PATH="$HOME/.gem/ruby/2.4.0/bin:$PATH"
 PATH="$HOME/tools/Qt/5.9.2/gcc_64/bin:$PATH"
 PATH="$HOME/tools/Qt/Tools/QtCreator/bin:$PATH"
+PATH="$HOME/tools/Write:$PATH"
+PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 
 export QT_SCALE_FACTOR=1.5

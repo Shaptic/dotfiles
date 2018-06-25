@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.3.3
+
+- **FIX**: Fix tab logic inside `st_code_highlight`.
+- **FIX**: Upgrade internal SuperFences to latest.
+
+## 3.3.2
+
+- **FIX**: Bring extensions up to the latest version.
+
+## 3.3.1
+
+Jan 1, 2018
+
+- **FIX**: Allow `-` in variables names. Write color translations to main scheme object and ensure filtering is done after color translations.
+
 ## 3.3.0
 
 Dec 3, 2017

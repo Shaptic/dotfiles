@@ -3,6 +3,8 @@ ETH="Ξ"
 BTC="฿"
 LTC="Ł"
 IOTA="ι"
+ARK="⟑"
+XRP="Ɍ"
 
 PREV=0
 PRICE=0
@@ -12,15 +14,12 @@ DOWNCOLOR="#EF4836"
 
 function get_price_coinbase {
   local SYMBOL=""
-  if [[ "$#" == "0" || "$1" == "eth" ]]; then
+  if [[ "$1" == "eth" ]]; then
     SYMBOL="ETH-USD"
-
   elif [[ "$1" == "btc" ]]; then
     SYMBOL="BTC-USD"
-
   elif [[ "$1" == "ltc" ]]; then
     SYMBOL="LTC-USD"
-
   fi
 
   local PARAMS=""
@@ -34,28 +33,47 @@ function get_price_coinbase {
 
 
 function get_price_binance {
-  if [[ "$1" == "iota" ]]; then
+  local SYMBOL=""
+  if [[ "$1" == "eth" ]]; then
+    SYMBOL="ETHUSDT"
+  elif [[ "$1" == "iota" ]]; then
     SYMBOL="IOTAETH"
+  elif [[ "$1" == "ark" ]]; then
+    SYMBOL="ARKETH"
+  elif [[ "$1" == "ripple" ]]; then
+    SYMBOL="XRPETH"
   fi
 
-  local RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=IOTAETH)
+  local RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=$SYMBOL)
 
   RV1=$(echo $RESULT | jq '.lastPrice' | sed -s s/\"//g)
   RV2=$(echo $RESULT | jq '.openPrice' | sed -s s/\"//g)
 }
 
+function errorout {
+  # Show nothing if the API call fails (probably no internet)
+  echo ""
+  echo ""
+  echo $DOWNCOLOR
+}
 
-if [[ "$#" == "0" || "$1" == "eth" ]]; then
+if [[ "$1" == "btc" ]]; then
+  LOGO=$BTC
+
+elif [[ "$1" == "eth" ]]; then
   LOGO=$ETH
 
 elif [[ "$1" == "ltc" ]]; then
   LOGO=$LTC
 
-elif [[ "$1" == "btc" ]]; then
-  LOGO=$BTC
-
 elif [[ "$1" == "iota" ]]; then
   LOGO=$IOTA
+
+elif [[ "$1" == "ark" ]]; then
+  LOGO=$ARK
+
+elif [[ "$1" == "ripple" ]]; then
+  LOGO=$XRP
 
 else
   echo "[invalid coin]"
@@ -64,26 +82,20 @@ else
   exit 1
 fi
 
-# Show nothing if the API call fails (probably no internet)
-if [[ $? -ne 0 ]]; then
-  echo ""
-  echo ""
-  echo $DOWNCOLOR
-  exit 1
-fi
-
 if [[ "$1" == "btc" || "$1" == "eth" || "$1" == "ltc" ]]; then
-  get_price_coinbase $1
+  get_price_coinbase $1 || errorout
+
   PRICE=$RV
   get_price_coinbase $1 "yday"
   PREV=$RV
 
-elif [[ "$1" == "iota" ]]; then
-  get_price_binance "iota"
+elif [[ "$1" == "iota" || "$1" == "ark" || "$1" == "ripple" ]]; then
+  get_price_binance $1 || errorout
+
   PRICE=$RV1
   PREV=$RV2
-  get_price_coinbase "eth"
-  PRICE=$(echo "$PRICE $RV" | awk '{printf "%0.2f\n", $1 * $2}')
+  get_price_binance "eth"
+  PRICE=$(echo "$PRICE $RV1" | awk '{printf "%0.2f\n", $1 * $2}')
 fi
 
 UP=$(bc <<< "$PRICE > $PREV")
