@@ -112,10 +112,14 @@ ICONS = {
     "Cloudy":       (u"☁☁", "#6C7A89"),
     "Intermittent Clouds":
                     (u"🌤", "#F5D76E"),
-    "Partly Cloudy":(u"🌥", "#67809F"),
+    "Partly Cloudy":(u"🌤", "#22A7F0"),
     "Mostly Cloudy":(u"🌥", "#67809F"),
     "Mostly Cloudy W/ Showers":
-                    (u"🌦", "#135f89"),
+                    (u"🌦", "#135F89"),
+    "Partly Cloudy W/ Showers":
+                    (u"🌦", "#135F89"),
+    "Partly Sunny W/ Showers":
+                    (u"🌦", "#22A7F0"),
     "Rain":         (u"☔🌧", "#22A7F0"),
     "Showers":      (u"🌧", "#22A7F0"),
     "Fog":          (u"🌫🌫", "#67809F"),
@@ -215,6 +219,10 @@ class SimpleWeather(object):
         "Mostly Cloudy":on_simple,
         "Mostly Cloudy W/ Showers":
                         on_simple,
+        "Partly Cloudy W/ Showers":
+                        on_sunny,
+        "Partly Sunny W/ Showers":
+                        on_sunny,
         "Rain":         on_simple,
         "Showers":      on_simple,
         "Fog":          on_simple,
