@@ -120,6 +120,8 @@ ICONS = {
                     (u"🌦", "#135F89"),
     "Partly Sunny W/ Showers":
                     (u"🌦", "#22A7F0"),
+    "Mostly Cloudy W/ T-Storms":
+                    (u"🌩", "#67809F"),
     "Rain":         (u"☔🌧", "#22A7F0"),
     "Showers":      (u"🌧", "#22A7F0"),
     "Fog":          (u"🌫🌫", "#67809F"),
@@ -223,6 +225,8 @@ class SimpleWeather(object):
                         on_sunny,
         "Partly Sunny W/ Showers":
                         on_sunny,
+        "Mostly Cloudy W/ T-Storms":
+                        on_simple,
         "Rain":         on_simple,
         "Showers":      on_simple,
         "Fog":          on_simple,
