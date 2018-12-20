@@ -120,6 +120,8 @@ ICONS = {
                     (u"🌦", "#135F89"),
     "Partly Sunny W/ Showers":
                     (u"🌦", "#22A7F0"),
+    "Partly Sunny W/ T-Storms":
+                    (u"🌤⚡", "#67809F"),
     "Mostly Cloudy W/ T-Storms":
                     (u"🌩", "#67809F"),
     "Thunderstorms":(u"🌩", "#67809F"),
@@ -160,14 +162,9 @@ class SimpleWeather(object):
     def on_clear(self, desc):
         """ Handles "Clear" weather, which changes based on time of day.
         """
-        sunrise, sunset = self.peaks
+        if self.is_night():
+            return ICONS[desc]
 
-        # Approximate the next day's sunrise so that we can properly compare it
-        # for nighttime.
-        sunrise = sunrise[0].replace(day=sunrise[0].day + 1)
-
-        if self._now > sunset[1] and self._now < sunrise:
-            return ICONS[desc]      # night time
         return ICONS["DayClear"]
 
     def on_sunset(self):
@@ -176,7 +173,9 @@ class SimpleWeather(object):
 
     def on_sunny(self, desc):
         retval = self.on_sunset()
-        return retval if retval else ICONS[desc]
+        if retval: return retval
+        if self.is_night(): return ICONS["Clear"]
+        return ICONS[desc]
 
     def on_simple(self, desc):
         icon, color = ICONS["default"] if desc not in ICONS else ICONS[desc]
@@ -188,6 +187,14 @@ class SimpleWeather(object):
 
     def is_sunset(self):
         return self._now >= self.peaks[1][0] and self._now <= self.peaks[1][1]
+
+    def is_night(self):
+        # Approximate the next day's sunrise so that we can properly compare it
+        # for nighttime.
+        sunrise, sunset = self.peaks
+        sunrise = sunrise[0].replace(day=sunrise[0].day + 1)
+
+        return self._now > sunset[1] and self._now < sunrise
 
     @property
     def full(self):
@@ -214,11 +221,11 @@ class SimpleWeather(object):
         "Clear":        on_clear,
         "Mostly Clear": on_clear,
         "Sunny":        on_sunny,
-        "Partly Sunny": on_simple,
+        "Partly Sunny": on_sunny,
         "Mostly Sunny": on_sunny,
         "Intermittent Clouds":
-                        on_simple,
-        "Partly Cloudy":on_simple,
+                        on_sunny,
+        "Partly Cloudy":on_sunny,
         "Mostly Cloudy":on_simple,
         "Mostly Cloudy W/ Showers":
                         on_simple,
@@ -229,6 +236,8 @@ class SimpleWeather(object):
         "Thunderstorms":on_simple,
         "Mostly Cloudy W/ T-Storms":
                         on_simple,
+        "Partly Sunny W/ T-Storms":
+                        on_sunny,
         "Rain":         on_simple,
         "Showers":      on_simple,
         "Fog":          on_simple,
@@ -446,7 +455,7 @@ if __name__ == '__main__':
 
     try:
         main(args)
-    except:
+    except Exception, e:
         if not args.q:
             print "[no weather]"
             print "[n/a]"

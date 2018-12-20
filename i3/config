@@ -103,7 +103,7 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
-exec --no-startup-id xrandr --output eDP1 --brightness 0.6
+#exec --no-startup-id xrandr --output eDP1 --brightness 0.6
 exec --no-startup-id xrandr --output eDP1 --dpi 180
 
 # reload the configuration file
@@ -179,12 +179,14 @@ exec --no-startup-id nitrogen --restore
 exec --no-startup-id xinput set-prop 13 261 1.8
 
 # Set natural two-finger scrolling.
-exec --no-startup-id xinput set-prop 13 301 -113 -113
+exec --no-startup-id xinput set-prop 12 294 1
+
 
 # ======== Startup Applications ======== #
 #exec --no-startup-id ~/.config/i3/scripts/prepare-workspaces.sh
 exec --no-startup-id xfce4-power-manager
 #exec --no-startup-id redshift-gtk
+bindsym ctrl+$mod+w exec --no-startup-id ~/.config/i3/workspaces/beacon.sh
 
 # ======== Key Bindings ======== #
 bindsym $mod+c kill

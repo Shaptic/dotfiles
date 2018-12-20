@@ -88,7 +88,7 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
+alias ll='ls -lAhF'
 alias la='ls -A'
 alias l='ls -CF'
 
@@ -175,26 +175,34 @@ __prompt() {
   EDGE="$BLUE"
   PS1="$EDGE┌─ $CMDICON $BDBLUE\u$WHITE@$BLUE\h $WHITE[$BDTEAL\w$WHITE]"
 
-  if [[ $(pwd) == *"cicada"* ]]; then
-    count=$(ct | wc -l)
-  else
-    count=$(t | wc -l)
-  fi
-  PS1="$PS1 $WHITE── $BDWHITE[ $GREEN📓$count"
+  # if [[ $(pwd) == *"cicada"* ]]; then
+  #   count=$(ct | wc -l)
+  # else
+  #   count=$(t | wc -l)
+  # fi
+  # PS1="$PS1 $WHITE── $BDWHITE[ $GREEN📓$count"
+  PS1="$PS1 $WHITE"
 
   git status &> /dev/null
   if [[ $? -eq 0 ]]; then
-    branch=$(git branch | grep \* | cut -d ' ' -f2)
-    PS1="$PS1$WHITE | $BDPURPLE$branch$WHITE"
+    branch=$(git branch | grep \* | cut -b 3-)
+    PS1="$PS1$WHITE($BDPURPLE$branch$WHITE"
 
     staged=$(git status -s | egrep -c "^[MARCD] ")
     changed=$(git status -s | egrep -c "^ [MARCD]")
     added=$(git status -s | egrep -c "^\?\?")
     PS1="$PS1$LTWHITE $GREEN+$staged$LTWHITE,$YELLOW+$changed$LTWHITE,$RED+$added"
+    PS1="$PS1$WHITE) "
   fi
-  PS1="$PS1$BDWHITE ]"
+  # PS1="$PS1$BDWHITE ]"
 
-  PS1="$PS1\n$EDGE└─ $WHITE$PERM $WHITE"
+  PS1="$PS1\n$EDGE└─"
+  if [[ ! -z $VIRTUAL_ENV ]]; then
+    local base=$(basename $VIRTUAL_ENV)
+    local upone=$(echo $VIRTUAL_ENV | sed -e "s/$base//")
+    PS1="$PS1── $BDGRAY$(basename $upone)"
+  fi
+  PS1="$PS1$WHITE $PERM "
   PS2="    $WHITE "
 }
 

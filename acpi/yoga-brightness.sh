@@ -9,9 +9,9 @@ MAX=$(cat "$BR_DIR/max_brightness")
 VAL=$(cat "$BR_DIR/brightness")
 
 if [ "$1" = down ]; then
-    VAL=$((VAL-71))
+    VAL=$((VAL-41))
 else
-    VAL=$((VAL+71))
+    VAL=$((VAL+41))
 fi
 
 if [ "$VAL" -lt $MIN ]; then

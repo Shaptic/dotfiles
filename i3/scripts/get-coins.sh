@@ -29,6 +29,7 @@ function get_price_coinbase {
   fi
 
   RV=$(curl -s https://api.coinbase.com/v2/prices/$SYMBOL/spot$PARAMS | jq '.data.amount' | sed -s s/\"//g)
+  RV=$(printf "%0.2f" "$RV")
 }
 
 

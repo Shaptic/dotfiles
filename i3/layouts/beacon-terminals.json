@@ -1,0 +1,60 @@
+//
+// +----------+----------+
+// |                     |
+// |                     |
+// |                     |
+// |                     |
+// |                     |
+// +---------------------+
+// |          |          |
+// |          |          |
+// |          |          |
+// |          |          |
+// |          |          |
+// +----------+----------+
+//
+{
+    // stacked split container with 1 children
+    "layout": "splitv",
+    "percent": 1,
+    "type": "con",
+    "nodes": [
+        {
+            "name": "top-term",
+            "type": "con",
+            "swallows": [
+                {
+                    "title": "server"
+                }
+            ]
+        },
+        {
+            // splitv split container with 2 children
+            "layout": "splith",
+            "percent": 0.5,
+            "type": "con",
+            "nodes": [
+                {
+                    "name": "btm-right-term",
+                    "percent": 0.5,
+                    "type": "con",
+                    "swallows": [
+                        {
+                            "title": "ganache"
+                        }
+                    ]
+                },
+                {
+                    "name": "btm-left-term",
+                    "percent": 0.5,
+                    "type": "con",
+                    "swallows": [
+                        {
+                            "title": "scratch"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
