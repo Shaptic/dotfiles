@@ -22,6 +22,8 @@ DIRECTORIES = {
     r"/etc/acpi/*": "acpi/",
     r".config/sublime-text-3/Installed\ Packages/": "sublime-text-3/",
     r".config/sublime-text-3/Packages/": "sublime-text-3/",
+    r"projects/patch_firefox.sh": "",
+    r".config/polybar": "polybar/",
 }
 
 def copy(src, dst):
