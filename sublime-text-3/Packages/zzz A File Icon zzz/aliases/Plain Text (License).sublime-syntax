@@ -4,6 +4,8 @@
 name: Plain Text (License)
 hidden: true
 file_extensions:
+  - copying
+  - copyright
   - license
 scope: text.plain.license
 contexts:

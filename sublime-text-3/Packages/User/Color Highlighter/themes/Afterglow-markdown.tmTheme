@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-
 <plist version="1.0">
 <dict>
     <key>name</key>
@@ -146,8 +143,7 @@
             <string>markup.quote.markdown</string>
             <key>settings</key>
             <dict>
-<!--                <key>background</key>
-            <string>#262626</string> -->
+
                 <key>foreground</key>
                 <string>#8c8c8c</string>
             </dict>
@@ -221,7 +217,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#797979</string>
             </dict>
@@ -234,7 +230,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#CC7833</string>
             </dict>
@@ -247,7 +243,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#a1617a</string>
             </dict>
@@ -260,7 +256,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#FFC66D</string>
             </dict>
@@ -284,7 +280,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#b4c973</string>
             </dict>
@@ -297,7 +293,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#D0D0FF</string>
             </dict>
@@ -310,7 +306,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#6D9CBE</string>
             </dict>
@@ -334,7 +330,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#6c99bb</string>
             </dict>
@@ -347,7 +343,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#b4c973</string>
             </dict>
@@ -360,7 +356,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#c45837</string>
             </dict>
@@ -395,7 +391,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#E8BF6A</string>
             </dict>
@@ -421,7 +417,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#a1617a</string>
             </dict>
@@ -464,7 +460,7 @@
             </dict>
         </dict>
 
-<!--  LESS, SASS and CSS -->
+
         <dict>
             <key>name</key>
             <string>CSS: units</string>
@@ -609,7 +605,7 @@
             </dict>
         </dict>
 
-        <!-- Critic Markup -->
+        
         <dict>
             <key>name</key>
             <string>Comments</string>
@@ -618,7 +614,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#ADADAD</string>
             </dict>
@@ -631,7 +627,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#7c9044</string>
             </dict>
@@ -657,7 +653,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#c45330</string>
             </dict>
@@ -670,7 +666,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#6c99bb</string>
             </dict>
@@ -683,7 +679,7 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#773b54</string>
             </dict>
@@ -696,13 +692,13 @@
             <key>settings</key>
             <dict>
                 <key>fontStyle</key>
-                <string></string>
+                <string />
                 <key>foreground</key>
                 <string>#e5b567</string>
             </dict>
         </dict>
 
-        <!-- GitGutter -->
+        
         <dict>
           <key>name</key>
           <string>GitGutter deleted</string>
@@ -758,6 +754,26 @@
             <string>#cccccc</string>
           </dict>
         </dict>
-    </array>
+    <dict>
+    <key>name</key>
+    <string>CH_color_scheme_fix</string>
+    <key>scope</key>
+    <string>ch_gutter_icon</string>
+    <key>settings</key>
+    <dict>
+        <key>foreground</key>
+        <string>#ffffff</string>
+    </dict>
+</dict><dict>
+    <key>name</key>
+    <string>CH_color_scheme_fix</string>
+    <key>scope</key>
+    <string>ch_gutter_icon</string>
+    <key>settings</key>
+    <dict>
+        <key>foreground</key>
+        <string>#ffffff</string>
+    </dict>
+</dict></array>
 </dict>
 </plist>

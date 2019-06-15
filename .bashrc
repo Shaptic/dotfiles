@@ -154,9 +154,6 @@ i3-get-workspace()
 bind '"\e[A"':history-search-backward
 bind '"\e[B"':history-search-forward
 
-# allows touch-screen scrolling in Firefox
-export MOZ_USE_XINPUT2=1
-
 __prompt() {
   local LASTCMD=$?
 
@@ -173,7 +170,8 @@ __prompt() {
   fi
 
   EDGE="$BLUE"
-  PS1="$EDGE┌─ $CMDICON $BDBLUE\u$WHITE@$BLUE\h $WHITE[$BDTEAL\w$WHITE]"
+  PS1="$EDGE┌─ $CMDICON "
+  PS1="$PS1$BDBLUE\u$WHITE@$BLUE\h $WHITE[$BDTEAL\w$WHITE]"
 
   # if [[ $(pwd) == *"cicada"* ]]; then
   #   count=$(ct | wc -l)
@@ -201,6 +199,9 @@ __prompt() {
     local base=$(basename $VIRTUAL_ENV)
     local upone=$(echo $VIRTUAL_ENV | sed -e "s/$base//")
     PS1="$PS1── $BDGRAY$(basename $upone)"
+  fi
+  if [[ ! -z $CONDA_PROMPT_MODIFIER ]]; then
+    PS1="$PS1── $BDGRAY$CONDA_PROMPT_MODIFIER"
   fi
   PS1="$PS1$WHITE $PERM "
   PS2="    $WHITE "

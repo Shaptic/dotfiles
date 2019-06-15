@@ -1,14 +1,15 @@
 xterm*dynamicColors: true
 xterm*font:     *-fixed-*-*-*-20-*
+xterm*SaveLines: 10000
 
 ! ------------------------------------------------------------------------------
 ! ROFI Color theme
 ! ------------------------------------------------------------------------------
-rofi.color-enabled: true
-rofi.color-window: #273238, #273238, #1e2529
-rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
-rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
-rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
+!rofi.color-enabled: true
+!rofi.color-window: #273238, #273238, #1e2529
+!rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
+!rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
+!rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
 
 ! ------------------------------------------------------------------------------
 ! urxvt configuration
@@ -38,13 +39,18 @@ URxvt.keysym.C-M-v:    builtin-string:
 
 ! Bind Ctrl-Shift-c & Ctrl-Shift-v to copy and paste
 ! I dont know why, but I needed to use hex keysym values to get it to work
-URxvt.keysym.C-S-0x43: eval:selection_to_clipboard
-URxvt.keysym.C-S-0x56: eval:paste_clipboard
+urxvt.keysym.C-S-0x43: eval:selection_to_clipboard
+urxvt.keysym.C-S-0x56: eval:paste_clipboard
 
 urxvt.keysym.Control-Left:  \033[1;5D
 urxvt.keysym.Control-Right: \033[1;5C
-URxvt.keysym.Control-l:     command:\033c
+
 ! clear the scrollback
+urxvt.keysym.Control-l:     command:\033c
+
+! scroll up and down one line
+urxvt.keysym.Shift-Up:      command:\033]720;1\007
+urxvt.keysym.Shift-Down:    command:\033]721;1\007
 
 !urxvt.letterSpace: -2
 urxvt.font:               xft:Source Code Pro:size=9:antialias=true,hinting=true, xft:symbola:size=10:antialias=true:hinting=true
@@ -59,40 +65,42 @@ xft.hintStyle: hintfull
 
 ! special
 urxvt.depth: 32
-urxvt.background:   rgba:0000/0000/0000/c800
-!urxvt.background:   rgba:1600/1b00/1d00/ee00
-!urxvt.background:   #161b1d
-urxvt.foreground:   #7ea2b4
-urxvt.cursorColor:  #7ea2b4
+!urxvt.foreground:   #7ea2b4
+!urxvt.cursorColor:  #7ea2b4
+*.foreground:   #d9d6ff
+*.cursorColor:  #d9d6ff
+! This is #260030 in RGBA with opacity
+urxvt.background:   rgba:2600/0000/3000/c800
+
 
 ! black
 urxvt.color0:       #161b1d
 urxvt.color8:       #5a7b8c
 
 ! red
-urxvt.color1:       #d24d72
-urxvt.color9:       #d24d72
+urxvt.color1:       #d24d8b
+urxvt.color9:       #d24d8b
 
 ! green
-urxvt.color2:       #568c3b
-urxvt.color10:      #568c3b
+urxvt.color2:       #66c638
+urxvt.color10:      #66c638
 
 ! yellow
-urxvt.color3:       #8a8a0f
-urxvt.color11:      #8a8a0f
+urxvt.color3:       #b4b42a
+urxvt.color11:      #b4b42a
 
 ! blue
-urxvt.color4:       #257fad
-urxvt.color12:      #257fad
+urxvt.color4:       #34b2f3
+urxvt.color12:      #34b2f3
 
 ! magenta
-urxvt.color5:       #5d5db1
-urxvt.color13:      #5d5db1
+urxvt.color5:       #7171d8
+urxvt.color13:      #7171d8
 
 ! cyan
-urxvt.color6:       #2d8f6f
-urxvt.color14:      #2d8f6f
+urxvt.color6:       #39b48c
+urxvt.color14:      #39b48c
 
 ! white
-urxvt.color7:       #7ea2b4
+urxvt.color7:       #d9d6ff
 urxvt.color15:      #ebf8ff

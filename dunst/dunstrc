@@ -138,8 +138,8 @@
 [shortcuts]
     close = ctrl+space
     close_all = ctrl+shift+space
-    history = ctrl+grave
-    context = ctrl+shift+period
+    #history = ctrl+grave
+    #context = ctrl+shift+period
 
 # ir8 8/8 http://www.flatuicolorpicker.com/
 

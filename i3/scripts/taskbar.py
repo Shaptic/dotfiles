@@ -99,7 +99,7 @@ KEYPATH = os.path.join(os.path.dirname(sys.argv[0]), ".keys")
 API_KEYS = tuple()
 
 BlockOutput = collections.namedtuple("i3BlockOutput", "full short color")
-WeatherBlock = BlockOutput(u"%d°%s (%s)",   # temperature, icon, city
+WeatherBlock = BlockOutput(u"%d°%s  %s",    # temperature, icon, city
                            u"%d°%s",        # just temperature + icon
                            "%s")            # color based on weather
 ICONS = {
@@ -109,7 +109,7 @@ ICONS = {
     "Sunny":        (u"☀", "#F9BF3B"),
     "Partly Sunny": (u"🌤", "#F5D76E"),
     "Mostly Sunny": (u"🌤", "#F5D76E"),
-    "Cloudy":       (u"☁☁", "#6C7A89"),
+    "Cloudy":       (u"☁", "#6C7A89"),
     "Intermittent Clouds":
                     (u"🌤", "#F5D76E"),
     "Partly Cloudy":(u"🌤", "#22A7F0"),

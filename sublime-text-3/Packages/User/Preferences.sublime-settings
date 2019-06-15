@@ -5,8 +5,7 @@
 	"bold_folder_labels": true,
 	"caret_style": "phase",
 	"color_inactive_tabs": true,
-	"color_scheme": "Packages/Agila Theme/Agila Light Solarized.tmTheme",
-	"dpi_scale": 1.8,
+	"color_scheme": "Packages/User/Color Highlighter/themes/Agila Light Solarized.tmTheme",
 	"drag_text": false,
 	"draw_white_space": "all",
 	"enable_telemetry": "disabled",
@@ -44,5 +43,6 @@
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
 	"trim_trailing_white_space_on_save": true,
+	"ui_scale": 1.8,
 	"wrap_width": 0
 }

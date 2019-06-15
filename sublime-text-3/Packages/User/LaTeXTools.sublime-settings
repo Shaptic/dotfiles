@@ -65,7 +65,7 @@
 
 	// set to true to use BibLaTeX instead of BibTex for bibliography completions
 	// can also be set on a per-project basis
-	"use_biblatex": false,
+	"use_biblatex": true,
 
 	// the mapping from the locales to the dictionaries for the
 	// `%!TEX spellcheck` directive, where the locales must be all lowercase
@@ -142,10 +142,10 @@
 	"preview_math_no_star_envs": ["displaymath"],
 
 	// The density of the preview image. The higher the density the bigger the phantom.
-	"preview_math_density": 150,
+	"preview_math_density": 300,
 	// If the image is not sharp enough increase this scale to get a better resolution.
 	// However also change the density by the same factor to keep the size.
-	"preview_math_scale_quotient": 1,
+	"preview_math_scale_quotient": 2,
 	// If this is true, the image will be rendered at a higher resolution and
 	// then scaled down. This generally results in a clearer image.
 	"preview_math_hires": true,
@@ -157,7 +157,7 @@
 	// "selected"  to show a phantom only for the currently selected includegraphics command
 	// "hover"     to show a popup if you hover over an includegraphics command
 	// "none"      to disable image preview
-	"preview_image_mode": "all",
+	"preview_image_mode": "selected",
 
 	// The image size in the preview popup.
 	// These are the outer dimensions of the maximal size.
@@ -231,10 +231,10 @@
 		// non-standard location or want to use a particular version of python.
 		// Both Python2 and Python3 are supported, but must have the DBus bindings
 		// installed.
-		"python": "",
+		"python": "/usr/bin/python3",
 		// The name of the ST2 or ST3 executable. On Ubuntu, both subl and sublime-text are
 		// available for ST2; adjust as needed for other platforms, and for ST3
-		"sublime": "sublime-text",
+		"sublime": "subl",
 		// How long to wait after evince or okular has launched before sending a sync message
 		// in seconds, floating point; choose 2.0 or 3.0 on a slower machine, 0.5 on a fast one
 		// Note: only tweak this if sync after launching the PDF viewer does not seem to work,
@@ -324,7 +324,7 @@
 	// if you do so, however, note that the path will be interpreted
 	// relative to the location of your project file
 
-	"output_directory": "",
+	"output_directory": "tex_build/",
 
 	// OPTION: "jobname"
 	// Specifies the jobname to use when building the document
@@ -376,7 +376,7 @@
 	// NOTE: custom builders CANNOT have the same name as an existing
 	// built-in build engine (including "default")
 
-	"builder": "traditional",
+	"builder": "",
 
 	// OPTION: "builder_path"
 	// If non-empty, specifies a path to a custom builder, relative to the
@@ -401,7 +401,8 @@
 		// See README or third-party documentation
 
 		// (built-ins): true shows the log of each command in the output panel
-		"display_log" : false,
+		"display_log" : true,
+		"options": ["-shell-escape"],
 
 		// Platform-specific settings:
 		"osx" : {
@@ -450,7 +451,7 @@
 	// "errors" (only show errors, which breaks the compilation)
 	// "warnings" (default, show errors and warnings)
 	// "badboxes" (show errors, warnings, and badboxes)
-	"show_error_phantoms": "warnings",
+	"show_error_phantoms": "errors",
 
 	// number of seconds to display the "build succeeded" or "build failed"
 	// message
