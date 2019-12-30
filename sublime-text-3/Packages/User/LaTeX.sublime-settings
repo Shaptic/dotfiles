@@ -1,4 +1,5 @@
 // These settings override both User and Default settings for the LaTeX syntax
 {
-    "tab_size": 2
+    "font_face": "Input",
+    "tab_size": 2,
 }

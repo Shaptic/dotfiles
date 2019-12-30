@@ -947,6 +947,17 @@
 				<string>#545454FF</string>
 			</dict>
 		</dict>
+		<dict>
+			<key>scope</key>
+			<string>col_39424EFF</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#39424EFF</string>
+				<key>foreground</key>
+				<string>#C0C0C0FF</string>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>

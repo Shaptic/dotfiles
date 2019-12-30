@@ -18,12 +18,13 @@ DIRECTORIES = {
     r".config/i3/*": "i3/",
     r"/usr/share/i3blocks/*": "i3/i3blocks/scripts/",
     r".config/dunst/dunstrc": "dunst/",
+    r".config/rofi/": "rofi/",
     r"/etc/init.d/gk-sensitivity.sh": "init.d/",
     r"/etc/acpi/*": "acpi/",
     r".config/sublime-text-3/Installed\ Packages/": "sublime-text-3/",
     r".config/sublime-text-3/Packages/": "sublime-text-3/",
-    r"projects/patch_firefox.sh": "",
-    r".config/polybar": "polybar/",
+    r"projects/patch_firefox.sh": "./",
+    r".config/polybar/": "polybar/",
 }
 
 def copy(src, dst):

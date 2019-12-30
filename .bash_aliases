@@ -3,9 +3,6 @@ alias snipc="snip && xclip -selection clipboard -target image/png < snip.png && 
 
 alias lock="light-locker-command -l"
 
-# ML4T setup
-alias ml4t="cd ~/school/ml4t-cs7646 && source .venv/bin/activate && cd projects/"
-
 # Task manager.
 alias t="python2 ~/.tasks/t.py --task-dir ~/.tasks/tasks --list tasks"
 alias ct="python2 ~/.tasks/t.py --task-dir ~/.tasks/tasks --list coding-tasks"
@@ -16,6 +13,7 @@ alias io="ssh shaptic@192.168.0.101 -p 1337"
 alias nflx="firefox --new-tab ~/.config/i3/scripts/nflx.html & disown"
 
 alias explore="thunar . & disown"
+alias first="python ~/projects/init_script.py"
 
 function makepdf {
   pdflatex $1
