@@ -172,11 +172,11 @@ exec --no-startup-id nitrogen --restore
 exec --no-startup-id xinput set-prop 13 261 1.8
 
 # Set natural two-finger scrolling.
-exec --no-startup-id xinput set-prop 12 294 1
+exec --no-startup-id xinput set-prop 12 294 0
 
 # Set brightness, DPI, and make touchscreen work on, well, the touchscreen.
 exec --no-startup-id xrandr --output eDP1 --brightness 0.5
-exec --no-startup-id xrandr --output eDP1 --dpi 180
+exec --no-startup-id xrandr --output eDP1 --dpi 210
 exec --no-startup-id ~/.config/i3/scripts/touchscreen.sh
 
 bindsym $mod+Right move container to output right
@@ -194,8 +194,15 @@ bindsym $mod+c kill
 bindsym ctrl+$mod+l exec light-locker-command -l
 bindsym shift+$mod+n exec --no-startup-id firefox --new-tab ~/.config/i3/scripts/nflx.html
 
-bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
-bindsym --release Mod1+Shift exec pkill -SIGRTMIN+2 i3blocks
+#bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
+#bindsym --release Mod1+Shift exec pkill -SIGRTMIN+2 i3blocks
+
+# For the 7th-gen X1, there are 4 speakers which are control via different
+# means. The volume buttons should control them all universally; this line maxes
+# out all of the individual ones and sets the last one to a sensible default.
+exec --no-startup-id amixer -c 0 sset 'Master' 100%
+exec --no-startup-id amixer -c 0 sset 'Speaker' 100%
+exec --no-startup-id amixer -c 0 sset 'PCM' 50%
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%

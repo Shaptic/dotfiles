@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 import os
 import sys
 import subprocess
@@ -21,8 +21,9 @@ DIRECTORIES = {
     r".config/rofi/": "rofi/",
     r"/etc/init.d/gk-sensitivity.sh": "init.d/",
     r"/etc/acpi/*": "acpi/",
-    r".config/sublime-text-3/Installed\ Packages/": "sublime-text-3/",
-    r".config/sublime-text-3/Packages/": "sublime-text-3/",
+    # r".config/sublime-text-3/Installed\ Packages/": "sublime-text-3/",
+    # r".config/sublime-text-3/Packages/": "sublime-text-3/",
+    r".config/sublime-text-3/Packages/User/*": "sublime-text-3/",
     r"projects/patch_firefox.sh": "./",
     r".config/polybar/": "polybar/",
 }
@@ -31,8 +32,8 @@ def copy(src, dst):
     cmd = "cp -R %s %s" %(src, dst)
     subprocess.Popen(cmd, shell=True)
 
-print "Assuming base path:", BASE_PATH
-print "Assuming repo path:", REPO_PATH
+print("Assuming base path:", BASE_PATH)
+print("Assuming repo path:", REPO_PATH)
 for src, dst in DIRECTORIES.items():
     # Skip the unnecessary cache files.
     if src.lower().find("cache") != -1:
@@ -42,12 +43,12 @@ for src, dst in DIRECTORIES.items():
     if not dst:
         dst = src
 
-    print "Backing up '%s' to '%s'" % (src, dst)
+    print("Backing up '%s' to '%s'" % (src, dst))
 
     # If the folder doesn't exist, create it.
     full_dst = os.path.expanduser(os.path.join(REPO_PATH, dst))
     if not os.path.exists(full_dst):
-        print "The folder '%s' doesn't exist, creating it at '%s'" % (dst, full_dst)
+        print("The folder '%s' doesn't exist, creating it at '%s'" % (dst, full_dst))
         os.makedirs(full_dst)
 
     copy(os.path.join(BASE_PATH, src), full_dst)

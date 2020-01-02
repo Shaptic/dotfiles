@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 """ A taskbar manager for i3blocks.
@@ -128,8 +128,8 @@ ICONS = {
     "Rain":         (u"☔🌧", "#22A7F0"),
     "Showers":      (u"🌧", "#22A7F0"),
     "Fog":          (u"🌫🌫", "#67809F"),
-    "Sunrise":      (u"🌄", "#E26A6A"),
-    "Sunset":       (u"🌅", "#E26A6A"),
+    "Sunrise":      (u"", "#E26A6A"),
+    "Sunset":       (u"", "#E26A6A"),
     "default":      (u"",  "#C5EFF7"),
 }
 
@@ -200,11 +200,11 @@ class SimpleWeather(object):
     def full(self):
         return (WeatherBlock.full % (self.temp,
             self.icon if self.icon else (u" [%s]" % self.desc),
-            self.city)).encode("utf-8")
+            self.city))
 
     @property
     def short(self):
-        return (WeatherBlock.short % (self.temp, self.icon)).encode("utf-8")
+        return (WeatherBlock.short % (self.temp, self.icon))
 
     @property
     def block(self):
@@ -408,11 +408,11 @@ def main(args):
             w = SimpleWeather(args.zip, faren=not args.celsius)
         else:
             w = SmartWeather(loc, faren=not args.celsius)
-        print w.block
+        print(w.block)
 
     elif args.mode == "location":
-        print loc
-        print "%s | %s" % get_city(loc)
+        print(loc)
+        print("%s | %s" % get_city(loc))
 
     elif args.mode == "peaks":
         delta = timedelta(minutes=30)
@@ -420,14 +420,14 @@ def main(args):
         sunrise, sunset = get_peak_times(loc)
         sunrise = sunrise[0] + delta
         sunset  = sunset[0]  + delta
-        print "In", city, "the..."
-        print "  sunrise is at", sunrise.time().strftime("%I:%M:%S %p")
-        print "  sunset  is at", sunset.time().strftime( "%I:%M:%S %p")
+        print("In", city, "the...")
+        print("  sunrise is at", sunrise.time().strftime("%I:%M:%S %p"))
+        print("  sunset  is at", sunset.time().strftime( "%I:%M:%S %p"))
 
     elif args.mode == "test-i3":
-        print "long test"
-        print "test"
-        print "#FFFFFF"
+        print("long test")
+        print("test")
+        print("#FFFFFF")
 
 if __name__ == '__main__':
     MODES = ("weather", "peaks", "location", "test-i3")
@@ -455,8 +455,8 @@ if __name__ == '__main__':
 
     try:
         main(args)
-    except Exception, e:
+    except Exception as e:
         if not args.q:
-            print "[no weather]"
-            print "[n/a]"
-            print "#E26A6A"
+            print("[no weather]")
+            print("[n/a]")
+            print("#E26A6A")
