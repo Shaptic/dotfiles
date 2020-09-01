@@ -1,0 +1,29 @@
+[
+    // Mouse 3 column select
+    {
+        "button": "button3",
+        "press_command": ""
+    },
+    {
+        "keys": ["alt+ctrl+up"],
+        "command": "select_lines",
+        "args": {"forward": false}
+    }, {
+        "keys": ["alt+ctrl+down"],
+        "command": "select_lines",
+        "args": {"forward": true}
+    }, {
+        "command": "sublime_jedi_docstring", "keys": ["ctrl+alt+d"],
+        "context": [
+            {
+                "key": "selector",
+                "operator": "equal",
+                "operand":  "source.python - string - comment"
+            }
+        ]
+    },
+    { "keys": ["ctrl+pagedown"], "command": "next_view" },  // _in_stack
+    { "keys": ["ctrl+pageup"], "command": "prev_view" },
+    { "keys": ["ctrl+tab"], "command": "next_view" },
+    { "keys": ["ctrl+shift+tab"], "command": "prev_view" }
+]
