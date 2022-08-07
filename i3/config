@@ -169,15 +169,18 @@ exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
 exec --no-startup-id nitrogen --restore
 
 # Set mouse sensitivity.
-exec --no-startup-id xinput set-prop 13 261 1.8
+# X1 Yoga: exec --no-startup-id xinput set-prop 13 261 1.8
+# X1 Carbon:
+exec --no-startup-id xinput set-prop 14 316 0.3
 
-# Set natural two-finger scrolling.
-exec --no-startup-id xinput set-prop 12 294 0
+# Set natural two-finger scrolling on MOUSEPAD but NOT trackpoint
+# X1 Yoga: exec --no-startup-id xinput set-prop 12 294 1
+# X1 Carbon:
+exec --no-startup-id xinput set-prop 11 307 0 
 
 # Set brightness, DPI, and make touchscreen work on, well, the touchscreen.
-exec --no-startup-id xrandr --output eDP1 --brightness 0.5
-exec --no-startup-id xrandr --output eDP1 --dpi 210
-exec --no-startup-id ~/.config/i3/scripts/touchscreen.sh
+exec --no-startup-id xrandr --output eDP1 --gamma 0.90:0.9:0.9 --brightness 1 --dpi 210
+#exec --no-startup-id ~/.config/i3/scripts/touchscreen.sh
 
 bindsym $mod+Right move container to output right
 bindsym $mod+Left move container to output left
@@ -203,6 +206,9 @@ bindsym shift+$mod+n exec --no-startup-id firefox --new-tab ~/.config/i3/scripts
 exec --no-startup-id amixer -c 0 sset 'Master' 100%
 exec --no-startup-id amixer -c 0 sset 'Speaker' 100%
 exec --no-startup-id amixer -c 0 sset 'PCM' 50%
+
+# stop middle mouse clicks ffs
+exec --no-startup-id xbindkeys
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%

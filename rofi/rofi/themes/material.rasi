@@ -25,12 +25,13 @@
 	base0E: #C792EA;
 	base0F: #FF5370;
 
-	/*base0D: #00BCD4;*/
+	base0D: #00BCD4;
 
 	spacing: 0;
-	background-color: transparent;
+	background-color: @base00;
 
 	font: "Roboto Mono 13";
+	text-color: @base04;
 }
 
 window {

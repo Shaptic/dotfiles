@@ -1,14 +1,15 @@
+@theme "~/.config/rofi/themes/material"
+
 configuration {
-    theme: "~/.config/rofi/themes/material";
 	width: 2550;
 	lines: 10;
 	columns: 7;
 	font: "Inconsolata 8";
 	location: 2;
 	yoffset: 5;
-    dpi: 130;
-    disable-history: true;
-    separator-style: "none";
+	dpi: 130;
+	disable-history: true;
+	separator-style: "none";
 
 /*	modi: "window,run,ssh";*/
 /*	bw: 1;*/

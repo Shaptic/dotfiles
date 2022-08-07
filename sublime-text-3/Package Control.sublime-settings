@@ -3,16 +3,13 @@
 	"in_process_packages":
 	[
 		"Boxy Theme",
-		"RestructuredText Improved"
 	],
 	"installed_packages":
 	[
 		"A File Icon",
 		"Agila Theme",
-		"Babel",
 		"Boxy Theme",
-		"Color Highlight",
-		"Color Highlighter",
+		"ColorHints",
 		"Diffy",
 		"Ethereum",
 		"ImageMagick",
@@ -22,14 +19,13 @@
 		"Package Control",
 		"PackageResourceViewer",
 		"Python Improved",
-		"QMakeProject",
 		"QML",
-		"Qt Completions for C++",
 		"RestructuredText Improved",
+		"Rust Enhanced",
 		"Sass",
 		"SCSS",
 		"SFTP",
 		"Theme - Afterglow",
 		"Wrap Plus"
-	]
+	],
 }

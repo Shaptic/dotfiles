@@ -5,6 +5,7 @@ LTC="Ł"
 IOTA="ι"
 ARK="⟑"
 XRP="Ɍ"
+XLM="Ø"
 
 PREV=0
 PRICE=0
@@ -43,6 +44,8 @@ function get_price_binance {
     SYMBOL="ARKETH"
   elif [[ "$1" == "ripple" ]]; then
     SYMBOL="XRPETH"
+  elif [[ "$1" == "stellar" ]]; then
+    SYMBOL="XLMETH"
   fi
 
   local RESULT=$(curl -s https://api.binance.com/api/v1/ticker/24hr?symbol=$SYMBOL)
@@ -76,6 +79,9 @@ elif [[ "$1" == "ark" ]]; then
 elif [[ "$1" == "ripple" ]]; then
   LOGO=$XRP
 
+elif [[ "$1" == "stellar" ]]; then
+  LOGO=$XLM
+
 else
   echo "[invalid coin]"
   echo "n/a"
@@ -90,22 +96,24 @@ if [[ "$1" == "btc" || "$1" == "eth" || "$1" == "ltc" ]]; then
   get_price_coinbase $1 "yday"
   PREV=$RV
 
-elif [[ "$1" == "iota" || "$1" == "ark" || "$1" == "ripple" ]]; then
+elif [[ "$1" == "iota" || "$1" == "ark" || "$1" == "ripple" || "$1" == "stellar" ]]; then
   get_price_binance $1 || errorout
 
   PRICE=$RV1
   PREV=$RV2
   get_price_binance "eth"
-  PRICE=$(echo "$PRICE $RV1" | awk '{printf "%0.2f\n", $1 * $2}')
+  PRICE=$(echo "$PRICE $RV1" | awk '{printf "%0.3f\n", $1 * $2}')
 fi
 
 UP=$(bc <<< "$PRICE > $PREV")
 
-echo "$LOGO $PRICE"
+echo -n $LOGO $PRICE
 if [[ UP -eq 1 ]]; then
+  echo " ↑"
   echo $LOGO↑
   echo $UPCOLOR
 else
+  echo " ↓"
   echo $LOGO↓
   echo $DOWNCOLOR
 fi

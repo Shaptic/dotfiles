@@ -53,10 +53,10 @@ urxvt.keysym.Shift-Up:      command:\033]720;1\007
 urxvt.keysym.Shift-Down:    command:\033]721;1\007
 
 !urxvt.letterSpace: -2
-urxvt.font:               xft:Source Code Pro:size=9:antialias=true,hinting=true, xft:symbola:size=10:antialias=true:hinting=true
-urxvt.boldFont:           xft:Source Code Pro:style=Bold:size=9:style=Bold:antialias=true,hinting=true
-urxvt.italicFont:         xft:Source Code Pro:style=Italic:size=9:antialias=true:hinting=true
-urxvt.bolditalicFont:     xft:Source Code Pro:style=Bold Italic:size=9:antialias=true:hinting=true
+urxvt.font:               xft:Source Code Pro:size=9,xft:DejaVu Sans Mono:size=9,xft:symbola:size=10
+urxvt.boldFont:           xft:Source Code Pro:style=Bold:size=9:style=Bold,xft:DejaVu Sans Mono:size=9
+urxvt.italicFont:         xft:Source Code Pro:style=Italic:size=9,xft:DejaVu Sans Mono:size=9
+urxvt.bolditalicFont:     xft:Source Code Pro:style=Bold Italic:size=9,xft:DejaVu Sans Mono:size=9
 
 xft.dpi: 192
 xft.antialias: true

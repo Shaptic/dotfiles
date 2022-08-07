@@ -27,7 +27,7 @@ function makepdf {
 }
 
 function pdf {
-  evince $1 & disown
+  evince "$*" & disown
 }
 
 function note {
@@ -37,9 +37,36 @@ function note {
   import assets/$filename.png
   echo "\begin{figure}[H]
   \centering
-  \includegraphics[width=2in]{assets/$filename.png}
+  \includegraphics[width=0.3\textwidth]{assets/$filename.png}
   \caption{}
   \label{fig:$filename}
 \end{figure}" | xclip -i -selection clipboard
   echo "Clipboard ready."
+}
+
+function wnote {
+  echo -n "Enter a snippet name: "
+  read -r filename
+  echo "Saving snippet to assets/$filename.png"
+  import assets/$filename.png
+  echo "\begin{wrapfigure}{r}{0.475\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{assets/$filename.png}
+  \caption{}
+  \label{fig:$filename}
+\end{wrapfigure}" | xclip -i -selection clipboard
+  echo "Clipboard ready."
+}
+
+function tweet {
+  if hugo config > /dev/null; then
+    local FILENAME=$(date '+blurb-%s.md')
+    echo "Creating blurb with name $FILENAME"
+
+    local FULLPATH=$(hugo new blurbs/$FILENAME | awk -F' ' '{print $1}')
+    echo "$*" >> $FULLPATH
+    subl -a $FULLPATH
+  else
+    echo "Error: $(pwd) does not contain a Hugo-based website."
+  fi
 }

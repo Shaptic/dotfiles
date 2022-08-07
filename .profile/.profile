@@ -31,5 +31,10 @@ PATH="$HOME/tools/Qt/Tools/QtCreator/bin:$PATH"
 # PATH="$PATH:$HOME/.gem/ruby/2.4.0/bin"
 # PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"
 
+# export GDK_SCALE=2
+# export GDK_DPI_SCALE=0.5
+
 export QT_SCALE_FACTOR=1
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
+
+export PATH="$HOME/.cargo/bin:$PATH"
