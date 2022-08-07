@@ -1,0 +1,30 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+		"Boxy Theme"
+	],
+	"installed_packages":
+	[
+		"A File Icon",
+		"Agila Theme",
+		"Boxy Theme",
+		"Color Highlight",
+		"Diffy",
+		"Gofmt",
+		"Golang Build",
+		"ImageMagick",
+		"LaTeXTools",
+		"Markdown Extended",
+		"Oceanic Color Scheme",
+		"Oceanic Next Color Scheme",
+		"Package Control",
+		"PackageResourceViewer",
+		"Python Improved",
+		"Sass",
+		"SCSS",
+		"SFTP",
+		"Theme - Afterglow",
+		"Wrap Plus"
+	]
+}
