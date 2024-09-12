@@ -304,6 +304,7 @@ def get_peak_times(location, skip=False):
 
         sunrise += offset
         sunset  += offset
+        sunset = sunset.replace(day=sunrise.day)
 
     return (
         (sunrise - timedelta(minutes=30),
